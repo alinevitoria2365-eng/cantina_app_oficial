@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin - Relatórios</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .report-card {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .report-card:hover {
+            border-color: #1a4fbf;
+            transform: translateX(4px);
+        }
+        .report-card .report-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .report-card .report-icon {
+            font-size: 26px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a4fbf, #12305c);
+            border-radius: 12px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .report-card .report-info {
+            flex: 1;
+            margin-left: 12px;
+        }
+        .report-card .report-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 700;
+            color: #12305c;
+            font-size: 17px;
+        }
+        .report-card .report-desc {
+            font-size: 13px;
+            color: #718096;
+            margin-top: 2px;
+        }
+        .report-card .report-arrow {
+            color: #1a4fbf;
+            font-size: 16px;
+            margin-left: 8px;
+        }
+        .report-content {
+            display: none;
+            margin-top: 16px;
+        }
+        .report-content.active {
+            display: block;
+        }
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .report-table th {
+            background: #eef1f6;
+            color: #12305c;
+            font-weight: 700;
+            padding: 9px 10px;
+            text-align: left;
+            border-bottom: 2px solid #dbe1ea;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .report-table td {
+            padding: 9px 10px;
+            border-bottom: 1px solid #eaeef4;
+            color: #2d3748;
+            vertical-align: top;
+        }
+        .report-table tr:hover td {
+            background: #f7f9fc;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .stat-box {
+            background: linear-gradient(135deg, #1a4fbf, #12305c);
+            color: #fff;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 14px rgba(18, 48, 92, 0.2);
+        }
+        .stat-box .stat-value {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 26px;
+            font-weight: 700;
+        }
+        .stat-box .stat-label {
+            font-size: 12px;
+            opacity: 0.92;
+            margin-top: 4px;
+        }
+        .stat-box.green {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            box-shadow: 0 4px 14px rgba(56, 161, 105, 0.25);
+        }
+        .stat-box.red {
+            background: linear-gradient(135deg, #fc8181, #e53e3e);
+            box-shadow: 0 4px 14px rgba(229, 62, 62, 0.25);
+        }
+        .stat-box.orange {
+            background: linear-gradient(135deg, #f6ad55, #dd6b20);
+            box-shadow: 0 4px 14px rgba(221, 107, 32, 0.25);
+        }
+.btn-print {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: #eef1f6;
+            border: 1px solid #dbe1ea;
+            border-radius: 8px;
+            color: #12305c;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 12px;
+        }
+        .btn-print:hover {
+            background: #e2e8f0;
+        }
+        .total-box {
+            margin-top: 12px;
+            padding: 12px;
+            background: #f0fff4;
+            border: 1px solid #c6f6d5;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            color: #276749;
+        }
+        .no-data {
+            text-align: center;
+            padding: 24px;
+            color: #a0aec0;
+        }
+        .no-data .icon {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+        @media print {
+            body::before, body::after { display: none !important; }
+            .container { zoom: 1 !important; box-shadow: none !important; }
+            .cv-header, .cv-back-bar, .cv-footer, .cv-footer-text { display: none !important; }
+        }
+    </style>
+</head>
+<body class="cv-page-body">
+    <div class="container cv-card">
+
+        <!-- LOGOTIPO CORONEL VENÂNCIO -->
+        <div class="cv-header">
+            <img class="cv-shield" src="../logocv.png" alt="Logotipo Coronel Venâncio">
+            <span class="cv-logo-title">Coronel Venâncio</span>
+            <span class="cv-logo-underline"></span>
+        </div>
+
+        <h2 class="cv-page-title">Relatórios</h2>
+        <div class="cv-divider"><span></span><i></i><span></span></div>
+        <p class="cv-page-subtitle">Visualize e analise dados do sistema</p>
+
+        <!-- RESUMO GERAL (sempre visível) -->
+        <div id="resumo-geral" style="margin-bottom:16px;"></div>
+
+        <!-- RELATÓRIO 1: Estoque Atual -->
+        <div class="report-card" onclick="toggleReport('estoque-atual')">
+            <div class="report-header">
+                <div class="report-icon">📦</div>
+                <div class="report-info">
+                    <div class="report-title">Estoque Atual</div>
+                    <div class="report-desc">Lista completa de todos os produtos com saldos e valores</div>
+                </div>
+                <span class="report-arrow" id="arrow-estoque-atual">▼</span>
+            </div>
+            <div class="report-content" id="report-estoque-atual"></div>
+        </div>
+
+        <!-- RELATÓRIO 2: Estoque Baixo -->
+        <div class="report-card" onclick="toggleReport('estoque-baixo')">
+            <div class="report-header">
+                <div class="report-icon" style="background:linear-gradient(135deg,#fc8181,#e53e3e);box-shadow:0 4px 14px rgba(229,62,62,0.25);">⚠️</div>
+                <div class="report-info">
+                    <div class="report-title">Estoque Baixo (Alerta)</div>
+                    <div class="report-desc">Produtos com quantidade abaixo do mínimo recomendado (10 unidades)</div>
+                </div>
+                <span class="report-arrow" id="arrow-estoque-baixo">▼</span>
+            </div>
+            <div class="report-content" id="report-estoque-baixo"></div>
+        </div>
+<!-- RELATÓRIO 3: Entradas -->
+        <div class="report-card" onclick="toggleReport('entradas')">
+            <div class="report-header">
+                <div class="report-icon" style="background:linear-gradient(135deg,#48bb78,#38a169);box-shadow:0 4px 14px rgba(56,161,105,0.25);">📥</div>
+                <div class="report-info">
+                    <div class="report-title">Registro de Entradas</div>
+                    <div class="report-desc">Histórico completo de todas as entradas no estoque</div>
+                </div>
+                <span class="report-arrow" id="arrow-entradas">▼</span>
+            </div>
+            <div class="report-content" id="report-entradas"></div>
+        </div>
+
+        <!-- RELATÓRIO 4: Saídas -->
+        <div class="report-card" onclick="toggleReport('saidas')">
+            <div class="report-header">
+                <div class="report-icon" style="background:linear-gradient(135deg,#fc8181,#e53e3e);box-shadow:0 4px 14px rgba(229,62,62,0.25);">📤</div>
+                <div class="report-info">
+                    <div class="report-title">Registro de Saídas</div>
+                    <div class="report-desc">Histórico completo de todas as saídas do estoque</div>
+                </div>
+                <span class="report-arrow" id="arrow-saidas">▼</span>
+            </div>
+            <div class="report-content" id="report-saidas"></div>
+        </div>
+
+        <!-- RELATÓRIO 5: Pedidos dos Usuários -->
+        <div class="report-card" onclick="toggleReport('pedidos')">
+            <div class="report-header">
+                <div class="report-icon" style="background:linear-gradient(135deg,#f6ad55,#dd6b20);box-shadow:0 4px 14px rgba(221,107,32,0.25);">🛒</div>
+                <div class="report-info">
+                    <div class="report-title">Pedidos dos Usuários</div>
+                    <div class="report-desc">Histórico de todos os pedidos realizados pelos usuários</div>
+                </div>
+                <span class="report-arrow" id="arrow-pedidos">▼</span>
+            </div>
+            <div class="report-content" id="report-pedidos"></div>
+        </div>
+
+        <!-- RELATÓRIO 6: Produtos mais movimentados -->
+        <div class="report-card" onclick="toggleReport('mais-movimentados')">
+            <div class="report-header">
+                <div class="report-icon" style="background:linear-gradient(135deg,#63b3ed,#3182ce);box-shadow:0 4px 14px rgba(49,130,206,0.25);">📈</div>
+                <div class="report-info">
+                    <div class="report-title">Produtos Mais Movimentados</div>
+                    <div class="report-desc">Ranking dos produtos com mais entradas e saídas</div>
+                </div>
+                <span class="report-arrow" id="arrow-mais-movimentados">▼</span>
+            </div>
+            <div class="report-content" id="report-mais-movimentados"></div>
+        </div>
+<div class="footer-bar cv-back-bar">
+            <button type="button" class="btn btn-outline cv-back-btn" onclick="window.location.href='menu.html'">
+                <span class="cv-back-icon">
+                    <svg viewBox="0 0 24 24" width="22" height="20" fill="none" stroke="#12305c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12 H4 M4 12 L10 6 M4 12 L10 18"/></svg>
+                </span>
+                <span class="cv-back-divider"></span>
+                <span class="cv-back-text">Voltar ao Menu</span>
+            </button>
+        </div>
+
+        <div class="cv-footer">
+            <div class="cv-footer-line"></div>
+            <span class="cv-footer-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#1a4fbf" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 2 V9 M3 2 V7 C3 8.5 4 9 5 9 M7 2 V7 C7 8.5 6 9 5 9"/>
+                    <path d="M5 9 V22"/>
+                    <path d="M17 2 C14.2 2 14 6 14 8.5 C14 10 15 10.5 16.5 10.5 V22"/>
+                    <path d="M16.5 10.5 V2"/>
+                </svg>
+            </span>
+            <div class="cv-footer-line"></div>
+        </div>
+        <p class="cv-footer-text">Qualidade, organização e cuidado em cada refeição.</p>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (getLoggedInType() !== "admin") {
+                window.location.href = "login.html";
+                return;
+            }
+            carregarResumoGeral();
+            loadReportEstoqueAtual();
+            loadReportEstoqueBaixo();
+            loadReportEntradas();
+            loadReportSaidas();
+            loadReportPedidos();
+            loadReportMaisMovimentados();
+        });
+
+        function toggleReport(reportId) {
+            const content = document.getElementById(`report-${reportId}`);
+            const arrow = document.getElementById(`arrow-${reportId}`);
+            if (content.classList.contains("active")) {
+                content.classList.remove("active");
+                arrow.textContent = "▼";
+            } else {
+                content.classList.add("active");
+                arrow.textContent = "▲";
+            }
+        }
+
+        // ===== RESUMO GERAL =====
+        function carregarResumoGeral() {
+            const products = getProducts();
+            const mov = getMovimentacoes();
+            const pedidos = getHistoricoPedidos();
+
+            const totalProdutos = products.length;
+            const totalItens = products.reduce((s, p) => s + p.quantidade, 0);
+            const totalEntradas = mov.filter(m => m.tipo === "entrada").reduce((s, m) => s + m.quantidade, 0);
+            const totalSaidas = mov.filter(m => m.tipo === "saida").reduce((s, m) => s + m.quantidade, 0);
+            const totalPedidos = pedidos.length;
+
+            const container = document.getElementById("resumo-geral");
+            container.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">${totalProdutos}</div>
+                        <div class="stat-label">Produtos</div>
+                    </div>
+                    <div class="stat-box green">
+                        <div class="stat-value">${totalItens}</div>
+                        <div class="stat-label">Itens em Estoque</div>
+                    </div>
+                    <div class="stat-box orange">
+                        <div class="stat-value">${totalEntradas}</div>
+                        <div class="stat-label">Entradas</div>
+                    </div>
+                    <div class="stat-box red">
+                        <div class="stat-value">${totalSaidas}</div>
+                        <div class="stat-label">Saídas</div>
+                    </div>
+                </div>
+                <div style="text-align:center;font-size:13px;color:#718096;">
+                    Total de pedidos realizados: <strong>${totalPedidos}</strong>
+                </div>
+            `;
+        }
+// ===== RELATÓRIO 1: ESTOQUE ATUAL =====
+        function loadReportEstoqueAtual() {
+            const products = getProducts();
+            const container = document.getElementById("report-estoque-atual");
+            if (products.length === 0) {
+                container.innerHTML = '<div class="no-data"><div class="icon">📦</div><p>Nenhum produto cadastrado</p></div>';
+                return;
+            }
+            let totalValue = 0;
+            let html = `
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Preço Unit.</th>
+                            <th>Valor Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            products.forEach((p, i) => {
+                const val = p.quantidade * p.preco;
+                totalValue += val;
+                html += `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td><strong>${p.nome}</strong></td>
+                        <td>${p.quantidade}</td>
+                        <td>R$ ${p.preco.toFixed(2)}</td>
+                        <td>R$ ${val.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+            html += `
+                    </tbody>
+                </table>
+                <div class="total-box">Valor Total em Estoque: R$ ${totalValue.toFixed(2)}</div>
+                <button class="btn-print" onclick="window.print()">🖨️ Imprimir Relatório</button>
+            `;
+            container.innerHTML = html;
+        }
+
+        // ===== RELATÓRIO 2: ESTOQUE BAIXO =====
+        function loadReportEstoqueBaixo() {
+            const products = getProducts();
+            const container = document.getElementById("report-estoque-baixo");
+            const baixo = products.filter(p => p.quantidade < 10);
+            const atencao = products.filter(p => p.quantidade >= 10 && p.quantidade < 20);
+
+            if (baixo.length === 0 && atencao.length === 0) {
+                container.innerHTML = '<div class="no-data"><div class="icon">✅</div><p>Todos os produtos estão com estoque adequado!</p></div>';
+                return;
+            }
+
+            let html = `
+                <div class="stats-grid">
+                    <div class="stat-box red">
+                        <div class="stat-value">${baixo.length}</div>
+                        <div class="stat-label">Crítico (&lt; 10)</div>
+                    </div>
+                    <div class="stat-box orange">
+                        <div class="stat-value">${atencao.length}</div>
+                        <div class="stat-label">Atenção (10-19)</div>
+                    </div>
+                </div>
+            `;
+
+            if (baixo.length > 0) {
+                html += `<h3 style="color:#c53030;font-family:'Playfair Display',Georgia,serif;margin-bottom:8px;">🔴 Produtos Críticos</h3>`;
+                html += `<table class="report-table"><thead><tr><th>Produto</th><th>Quantidade</th><th>Status</th></tr></thead><tbody>`;
+                baixo.forEach(p => {
+                    const badge = p.quantidade === 0 ? 'badge-low alert' : 'badge-low warning';
+                    const label = p.quantidade === 0 ? 'ESGOTADO' : 'BAIXO';
+                    html += `<tr><td><strong>${p.nome}</strong></td><td>${p.quantidade}</td><td><span class="${badge}">${label}</span></td></tr>`;
+                });
+                html += `</tbody></table>`;
+            }
+
+            if (atencao.length > 0) {
+                html += `<h3 style="color:#dd6b20;font-family:'Playfair Display',Georgia,serif;margin-top:16px;margin-bottom:8px;">🟡 Em Atenção</h3>`;
+                html += `<table class="report-table"><thead><tr><th>Produto</th><th>Quantidade</th></tr></thead><tbody>`;
+                atencao.forEach(p => {
+                    html += `<tr><td><strong>${p.nome}</strong></td><td>${p.quantidade}</td></tr>`;
+                });
+                html += `</tbody></table>`;
+            }
+
+            container.innerHTML = html;
+        }
+// ===== RELATÓRIO 3: ENTRADAS =====
+        function loadReportEntradas() {
+            const mov = getMovimentacoes();
+            const container = document.getElementById("report-entradas");
+            const entradas = mov.filter(m => m.tipo === "entrada").reverse();
+
+            if (entradas.length === 0) {
+                container.innerHTML = '<div class="no-data"><div class="icon">📥</div><p>Nenhuma entrada registrada</p></div>';
+                return;
+            }
+
+            let html = `
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>Data / Hora</th>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Origem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            entradas.forEach(m => {
+                html += `
+                    <tr>
+                        <td>${m.data}</td>
+                        <td><strong>${m.produto}</strong></td>
+                        <td style="color:#38a169;font-weight:600;">+${m.quantidade}</td>
+                        <td>${m.motivo || m.responsavel || "Admin"}</td>
+                    </tr>
+                `;
+            });
+            html += `
+                    </tbody>
+                </table>
+                <div class="total-box">Total de entradas: ${entradas.reduce((s, m) => s + m.quantidade, 0)} unidades</div>
+            `;
+            container.innerHTML = html;
+        }
+
+        // ===== RELATÓRIO 4: SAÍDAS =====
+        function loadReportSaidas() {
+            const mov = getMovimentacoes();
+            const container = document.getElementById("report-saidas");
+            const saidas = mov.filter(m => m.tipo === "saida").reverse();
+
+            if (saidas.length === 0) {
+                container.innerHTML = '<div class="no-data"><div class="icon">📤</div><p>Nenhuma saída registrada</p></div>';
+                return;
+            }
+
+            let html = `
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>Data / Hora</th>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Motivo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            saidas.forEach(m => {
+                html += `
+                    <tr>
+                        <td>${m.data}</td>
+                        <td><strong>${m.produto}</strong></td>
+                        <td style="color:#c53030;font-weight:600;">-${m.quantidade}</td>
+                        <td>${m.motivo || "Admin"}</td>
+                    </tr>
+                `;
+            });
+            html += `
+                    </tbody>
+                </table>
+                <div class="total-box" style="background:#fff5f5;border-color:#fed7d7;color:#c53030;">Total de saídas: ${saidas.reduce((s, m) => s + m.quantidade, 0)} unidades</div>
+            `;
+            container.innerHTML = html;
+        }
+
+        // ===== RELATÓRIO 5: PEDIDOS DOS USUÁRIOS =====
+        function loadReportPedidos() {
+            const pedidos = getHistoricoPedidos();
+            const container = document.getElementById("report-pedidos");
+
+            if (pedidos.length === 0) {
+                container.innerHTML = '<div class="no-data"><div class="icon">🛒</div><p>Nenhum pedido realizado ainda</p></div>';
+                return;
+            }
+
+            let html = `
+                <div class="stats-grid">
+                    <div class="stat-box orange">
+                        <div class="stat-value">${pedidos.length}</div>
+                        <div class="stat-label">Total de Pedidos</div>
+                    </div>
+                    <div class="stat-box green">
+                        <div class="stat-value">R$ ${pedidos.reduce((s, p) => s + p.total, 0).toFixed(2)}</div>
+                        <div class="stat-label">Valor Total</div>
+                    </div>
+                </div>
+            `;
+
+            pedidos.slice().reverse().forEach(pedido => {
+                html += `
+                    <div style="background:#f7fafc;border-radius:8px;padding:12px;margin-bottom:8px;border:1px solid #e2e8f0;">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                            <strong style="color:#12305c;">Pedido #${pedido.id}</strong>
+                            <span style="font-size:13px;color:#718096;">${pedido.data}</span>
+                        </div>
+                        <table class="report-table" style="font-size:13px;">
+                            <thead><tr><th>Item</th><th>Qtd</th><th>Preço</th><th>Subtotal</th></tr></thead>
+                            <tbody>
+                `;
+                pedido.itens.forEach(item => {
+                    html += `<tr><td>${item.nome}</td><td>${item.quantidade}</td><td>R$ ${item.preco.toFixed(2)}</td><td>R$ ${(item.quantidade * item.preco).toFixed(2)}</td></tr>`;
+                });
+                html += `
+                            </tbody>
+                        </table>
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+                            <span style="font-size:12px;font-weight:600;color:#4a5568;">Status:
+                                ${pedido.status === "aprovado" ? '✅ Aprovado' : pedido.status === "rejeitado" ? '❌ Rejeitado' : '⏳ Pendente'}
+                            </span>
+                            <strong style="color:#12305c;">Total: R$ ${pedido.total.toFixed(2)}</strong>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+// ===== RELATÓRIO 6: PRODUTOS MAIS MOVIMENTADOS =====
+        function loadReportMaisMovimentados() {
+            const mov = getMovimentacoes();
+            const container = document.getElementById("report-mais-movimentados");
+
+            if (mov.length === 0) {
+                container.innerHTML = '<div class="no-data"><div class="icon">📈</div><p>Nenhuma movimentação registrada ainda</p></div>';
+                return;
+            }
+
+            const agg = {};
+            mov.forEach(m => {
+                if (!agg[m.produto]) {
+                    agg[m.produto] = { produto: m.produto, entradas: 0, saidas: 0, total: 0 };
+                }
+                if (m.tipo === "entrada") {
+                    agg[m.produto].entradas += m.quantidade;
+                } else {
+                    agg[m.produto].saidas += m.quantidade;
+                }
+                agg[m.produto].total += m.quantidade;
+            });
+
+            const lista = Object.values(agg).sort((a, b) => b.total - a.total);
+
+            let html = `
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Produto</th>
+                            <th>Entradas</th>
+                            <th>Saídas</th>
+                            <th>Total Movimentado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            lista.forEach((row, i) => {
+                html += `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td><strong>${row.produto}</strong></td>
+                        <td style="color:#38a169;font-weight:600;">+${row.entradas}</td>
+                        <td style="color:#c53030;font-weight:600;">-${row.saidas}</td>
+                        <td>${row.total}</td>
+                    </tr>
+                `;
+            });
+            html += `
+                    </tbody>
+                </table>
+            `;
+            container.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

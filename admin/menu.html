@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Menu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/cardapio.css">
+</head>
+<body class="admin-menu-page">
+<div class="container admin-menu-container cv-menu-card">
+
+    <!-- LOGOTIPO CORONEL VENÂNCIO -->
+    <div class="cv-logo">
+        <img class="cv-shield" src="../logocv.png" alt="Logotipo Coronel Venâncio">
+        <span class="cv-logo-title">Coronel Venâncio</span>
+        <span class="cv-logo-underline"></span>
+    </div>
+
+    <!-- ÍCONE DE PERFIL (ADMIN) -->
+    <div class="cv-role-badge">
+        <svg viewBox="0 0 100 100" width="52" height="52" fill="none" stroke="#12305c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="50" cy="36" r="16"/>
+            <path d="M50 20 C41 18 35 25 36 33"/>
+            <path d="M25 84 C25 63 35 52 50 52 C65 52 75 63 75 84"/>
+        </svg>
+    </div>
+
+    <h2 class="cv-title">O que quer fazer?</h2>
+    <div class="cv-divider"><span></span><i></i><span></span></div>
+    <p class="subtitle" id="admin-greeting">Selecione uma operação</p>
+
+    <div class="menu-grid cv-menu-grid">
+        <button type="button" class="menu-btn cv-menu-btn" onclick="window.location.href='entrada.html'">
+            <span class="menu-icon cv-menu-icon">
+                <svg viewBox="0 0 48 48" width="26" height="26" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M24 6 V28 M24 28 L15 19 M24 28 L33 19"/>
+                    <path d="M8 26 V36 C8 39 10 41 13 41 H35 C38 41 40 39 40 36 V26"/>
+                </svg>
+            </span>
+            <span class="menu-text">Entrada</span>
+            <span class="menu-arrow cv-menu-arrow">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#1a4fbf" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6 L16 12 L9 18"/></svg>
+            </span>
+        </button>
+
+
+        
+       <!-- <button type="button" class="menu-btn cv-menu-btn" onclick="window.location.href='saida.html'">
+            <span class="menu-icon cv-menu-icon">
+                <svg viewBox="0 0 48 48" width="26" height="26" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M24 28 V6 M24 6 L15 15 M24 6 L33 15"/>
+                    <path d="M8 26 V36 C8 39 10 41 13 41 H35 C38 41 40 39 40 36 V26"/>
+                </svg>
+            </span>
+            <span class="menu-text">Saída</span>
+            <span class="menu-arrow cv-menu-arrow">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#1a4fbf" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6 L16 12 L9 18"/></svg>
+            </span>
+        </button>-->
+            
+       <!-- <button type="button" class="menu-btn cv-menu-btn" onclick="window.location.href='estoque.html'">
+            <span class="menu-icon cv-menu-icon">
+                <svg viewBox="0 0 48 48" width="26" height="26" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="10" y="8" width="28" height="34" rx="3"/>
+                    <rect x="17" y="5" width="14" height="7" rx="2" fill="#ffffff" stroke="none"/>
+                    <line x1="16" y1="20" x2="32" y2="20"/>
+                    <line x1="16" y1="27" x2="32" y2="27"/>
+                    <line x1="16" y1="34" x2="26" y2="34"/>
+                </svg>
+            </span>
+            <span class="menu-text">Ver itens</span>
+            <span class="menu-arrow cv-menu-arrow">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#1a4fbf" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6 L16 12 L9 18"/></svg>
+            </span>
+        </button> -->
+
+        <button type="button" class="menu-btn cv-menu-btn" onclick="window.location.href='pedidos.html'">
+            <span class="menu-icon cv-menu-icon">
+                <svg viewBox="0 0 48 48" width="26" height="26" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="10" y="8" width="28" height="34" rx="3"/>
+                    <rect x="17" y="5" width="14" height="7" rx="2" fill="#ffffff" stroke="none"/>
+                    <line x1="16" y1="20" x2="32" y2="20"/>
+                    <line x1="16" y1="27" x2="32" y2="27"/>
+                    <line x1="16" y1="34" x2="26" y2="34"/>
+                </svg>
+            </span>
+            <span class="menu-text">Gerenciar Pedidos</span>
+            <span class="menu-arrow cv-menu-arrow">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#1a4fbf" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6 L16 12 L9 18"/></svg>
+            </span>
+        </button>
+
+        <button type="button" class="menu-btn cv-menu-btn" onclick="window.location.href='logs.html'">
+            <span class="menu-icon cv-menu-icon">
+                <svg viewBox="0 0 48 48" width="26" height="26" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="24" cy="24" r="18"/>
+                    <path d="M24 14 V24 L31 29"/>
+                </svg>
+            </span>
+            <span class="menu-text">Histórico de Atividades</span>
+            <span class="menu-arrow cv-menu-arrow">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#1a4fbf" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6 L16 12 L9 18"/></svg>
+            </span>
+        </button>
+
+        <button type="button" class="menu-btn cv-menu-btn" id="btnCardapio" onclick="abrirCardapio()">
+            <span class="menu-icon cv-menu-icon">
+                <svg viewBox="0 0 48 48" width="26" height="26" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="8" y="10" width="32" height="30" rx="3"/>
+                    <line x1="8" y1="20" x2="40" y2="20"/>
+                    <line x1="16" y1="6" x2="16" y2="14"/>
+                    <line x1="32" y1="6" x2="32" y2="14"/>
+                    <line x1="15" y1="28" x2="33" y2="28"/>
+                    <line x1="15" y1="34" x2="27" y2="34"/>
+                </svg>
+            </span>
+            <span class="menu-text">Cardápio da Semana <span id="badgeCardapioAdmin" class="cv-cardapio-status-badge" style="display:none;"></span></span>
+            <span class="menu-arrow cv-menu-arrow">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#1a4fbf" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6 L16 12 L9 18"/></svg>
+            </span>
+        </button>
+    </div>
+
+    <div class="footer-bar cv-back-bar">
+        <button type="button" class="btn btn-outline cv-back-btn" onclick="window.location.href='../index.html'">
+            <span class="cv-back-icon">
+                <svg viewBox="0 0 24 24" width="22" height="20" fill="none" stroke="#12305c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12 H4 M4 12 L10 6 M4 12 L10 18"/></svg>
+            </span>
+            <span class="cv-back-divider"></span>
+            <span class="cv-back-text">Voltar ao Início</span>
+        </button>
+    </div>
+
+    <div class="cv-footer">
+        <div class="cv-footer-line"></div>
+        <span class="cv-footer-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#1a4fbf" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 2 V9 M3 2 V7 C3 8.5 4 9 5 9 M7 2 V7 C7 8.5 6 9 5 9"/>
+                <path d="M5 9 V22"/>
+                <path d="M17 2 C14.2 2 14 6 14 8.5 C14 10 15 10.5 16.5 10.5 V22"/>
+                <path d="M16.5 10.5 V2"/>
+            </svg>
+        </span>
+        <div class="cv-footer-line"></div>
+    </div>
+    <p class="cv-footer-text">Qualidade, organização e cuidado em cada refeição.</p>
+</div>
+
+    <script src="../js/app.js"></script>
+    <script src="../js/cardapio.js"></script>
+    <script>
+        // Proteger rota - verificar login
+        document.addEventListener("DOMContentLoaded", function() {
+            if (getLoggedInType() !== "admin") {
+                window.location.href = "login.html";
+                return;
+            }
+            const nome = getLoggedInName();
+            const greetingEl = document.getElementById("admin-greeting");
+            if (greetingEl && nome && nome !== "Administrador") {
+                greetingEl.textContent = `Olá, ${nome}! Selecione uma operação`;
+            }
+        });
+    </script>
+</body>
+</html>
+

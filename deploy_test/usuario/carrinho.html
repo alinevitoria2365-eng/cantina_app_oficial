@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuário - Carrinho</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="cv-page-body">
+    <div class="container cv-card">
+
+        <!-- LOGOTIPO CORONEL VENÂNCIO -->
+        <div class="cv-header">
+            <img class="cv-shield" src="../logocv.png" alt="Logotipo Coronel Venâncio">
+            <span class="cv-logo-title">Coronel Venâncio</span>
+            <span class="cv-logo-underline"></span>
+        </div>
+
+        <h2 class="cv-page-title">Carrinho</h2>
+        <div class="cv-divider"><span></span><i></i><span></span></div>
+        <p class="cv-page-subtitle">Resumo do seu pedido</p>
+
+        <div id="cart-list"></div>
+
+        <div class="footer-bar" style="flex-direction:column;gap:12px;">
+            <button class="btn btn-success" onclick="confirmarPedido()">✅ Confirmar Pedido</button>
+            <a href="pedidos.html" class="btn btn-outline">← Continuar Comprando</a>
+        </div>
+
+        <div class="cv-footer">
+            <div class="cv-footer-line"></div>
+            <span class="cv-footer-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#1a4fbf" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 2 V9 M3 2 V7 C3 8.5 4 9 5 9 M7 2 V7 C7 8.5 6 9 5 9"/>
+                    <path d="M5 9 V22"/>
+                    <path d="M17 2 C14.2 2 14 6 14 8.5 C14 10 15 10.5 16.5 10.5 V22"/>
+                    <path d="M16.5 10.5 V2"/>
+                </svg>
+            </span>
+            <div class="cv-footer-line"></div>
+        </div>
+        <p class="cv-footer-text">Qualidade, organização e cuidado em cada refeição.</p>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (getLoggedInType() !== "usuario") {
+                window.location.href = "login.html";
+                return;
+            }
+            renderCartList("cart-list");
+        });
+    </script>
+</body>
+</html>

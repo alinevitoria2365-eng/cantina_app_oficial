@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Itens no Estoque</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="cv-page-body">
+    <div class="container cv-card">
+
+        <!-- LOGOTIPO CORONEL VENÂNCIO -->
+        <div class="cv-header">
+            <img class="cv-shield" src="../logocv.png" alt="Logotipo Coronel Venâncio">
+            <span class="cv-logo-title">Coronel Venâncio</span>
+            <span class="cv-logo-underline"></span>
+        </div>
+
+        <h2 class="cv-page-title">Itens no Estoque</h2>
+        <div class="cv-divider"><span></span><i></i><span></span></div>
+        <p class="cv-page-subtitle">Saldos finais consolidados</p>
+
+        <div class="scrollable-list" id="product-list"></div>
+
+        <div class="footer-bar cv-back-bar">
+            <button type="button" class="btn btn-outline cv-back-btn" onclick="window.location.href='menu.html'">
+                <span class="cv-back-icon">
+                    <svg viewBox="0 0 24 24" width="22" height="20" fill="none" stroke="#12305c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12 H4 M4 12 L10 6 M4 12 L10 18"/></svg>
+                </span>
+                <span class="cv-back-divider"></span>
+                <span class="cv-back-text">Voltar ao Menu</span>
+            </button>
+        </div>
+
+        <div class="cv-footer">
+            <div class="cv-footer-line"></div>
+            <span class="cv-footer-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#1a4fbf" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 2 V9 M3 2 V7 C3 8.5 4 9 5 9 M7 2 V7 C7 8.5 6 9 5 9"/>
+                    <path d="M5 9 V22"/>
+                    <path d="M17 2 C14.2 2 14 6 14 8.5 C14 10 15 10.5 16.5 10.5 V22"/>
+                    <path d="M16.5 10.5 V2"/>
+                </svg>
+            </span>
+            <div class="cv-footer-line"></div>
+        </div>
+        <p class="cv-footer-text">Qualidade, organização e cuidado em cada refeição.</p>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (getLoggedInType() !== "admin") {
+                window.location.href = "login.html";
+                return;
+            }
+
+            const products = getProducts();
+            const container = document.getElementById("product-list");
+
+            if (products.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">📦</div><p>Nenhum produto cadastrado</p></div>';
+                return;
+            }
+
+            let html = '<ul class="product-list">';
+            products.forEach(p => {
+                const valorTotal = p.quantidade * p.preco;
+                html += `
+                    <li class="product-item">
+                        <div class="product-info">
+                            <span class="product-name">${p.nome}</span>
+                            <span class="product-qty">Quantidade: <strong>${p.quantidade}</strong> | Preço Unit.: R$ ${p.preco.toFixed(2)}</span>
+                            <span style="font-size:12px;color:#718096;">Valor em estoque: <strong>R$ ${valorTotal.toFixed(2)}</strong></span>
+                        </div>
+                        <div style="font-size:24px;">📦</div>
+                    </li>`;
+            });
+            html += '</ul>';
+            container.innerHTML = html;
+        });
+    </script>
+</body>
+</html>

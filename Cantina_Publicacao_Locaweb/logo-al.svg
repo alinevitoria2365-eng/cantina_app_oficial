@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Logotipo AL">
+    <!-- Disco central azul marinho -->
+    <circle cx="200" cy="200" r="145" fill="#142a50"/>
+    <!-- Anel interno fino -->
+    <circle cx="200" cy="200" r="132" fill="none" stroke="#4a7bd0" stroke-width="1.5" opacity="0.85"/>
+    <!-- Anel externo com aberturas laterais -->
+    <g fill="none" stroke="#4a7bd0" stroke-width="6" stroke-linecap="round">
+        <path d="M 348 222.4 A 150 150 0 0 1 52 222.4"/>
+        <path d="M 348 177.6 A 150 150 0 0 0 52 177.6"/>
+    </g>
+    <!-- Pontos decorativos laterais -->
+    <g fill="#4a7bd0">
+        <circle cx="56" cy="190" r="6"/>
+        <circle cx="56" cy="212" r="6"/>
+        <circle cx="344" cy="190" r="6"/>
+        <circle cx="344" cy="212" r="6"/>
+    </g>
+    <!-- Monograma AL com swash -->
+    <g>
+        <text x="178" y="280" text-anchor="middle" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="220" font-weight="700" fill="#4a7bd0">A</text>
+        <text x="246" y="280" text-anchor="middle" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="220" font-weight="700" fill="#4a7bd0">L</text>
+        <path d="M 152 242 C 112 268, 106 318, 152 330 C 196 341, 232 306, 240 272 C 244 254, 238 242, 250 228" fill="none" stroke="#4a7bd0" stroke-width="4.5" stroke-linecap="round"/>
+    </g>
+</svg>

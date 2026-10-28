@@ -1,0 +1,1439 @@
+/* =====================================================================
+   CARDÁPIO REGULAR - estilos do modal e da tabela
+   Reproduz o visual do cardápio oficial (SEDUC-SP / COALE):
+   cabeçalho azul, bordas pretas, fonte Arial, textos em maiúsculas.
+   ===================================================================== */
+
+/* ---------- Fundo escuro do modal ---------- */
+.cardapio-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(10, 30, 65, 0.78);
+}
+
+.cardapio-overlay.aberto {
+    display: flex;
+    animation: cardapioFade 0.25s ease;
+}
+
+@keyframes cardapioFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ---------- Caixa do modal ---------- */
+.cardapio-modal {
+    position: relative;
+    width: 100%;
+    max-width: 1100px;
+    max-height: 94vh;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+}
+
+.cardapio-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1.5px solid #e4e8ef;
+    background: #ffffff;
+}
+
+.cardapio-topo-titulo {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #12305c;
+}
+
+.cardapio-fechar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1.5px solid #e4e8ef;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #12305c;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.cardapio-fechar:hover {
+    background: #f7f9fc;
+    border-color: #1a4fbf;
+}
+
+/* Área com rolagem (a tabela é larga, então rola na horizontal no celular) */
+.cardapio-corpo {
+    overflow: auto;
+    padding: 16px;
+    background: #ffffff;
+}
+
+/* ---------- Folha do cardápio (moldura preta externa) ---------- */
+.cardapio-folha {
+    min-width: 900px;
+    border: 2px solid #1a1a1a;
+    background: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #262626;
+}
+
+.cardapio-gov {
+    padding: 8px 10px 4px;
+    text-align: center;
+    font-size: 12.5px;
+    font-weight: 700;
+    line-height: 1.5;
+    text-transform: uppercase;
+    color: #404040;
+}
+
+.cardapio-comunicado {
+    padding: 6px 4px 4px;
+    font-size: 12.5px;
+    color: #333333;
+}
+
+.cardapio-titulo {
+    padding: 0 0 4px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #333333;
+}
+
+/* ---------- Tabelas ---------- */
+.cardapio-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.cardapio-tabela th,
+.cardapio-tabela td {
+    border: 1.5px solid #1a1a1a;
+    padding: 4px 6px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 13.5px;
+    line-height: 1.4;
+    color: #2b2b2b;
+}
+
+/* Cabeçalho azul (Sem / Cardápio / dias da semana / datas) */
+.cardapio-tabela th.cab {
+    background-color: #4a93c9;
+    background-image: repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0,
+        rgba(255, 255, 255, 0) 57px,
+        rgba(255, 255, 255, 0.22) 57px,
+        rgba(255, 255, 255, 0.22) 60px
+    );
+    font-weight: 400;
+    font-size: 15px;
+    color: #1f2f3d;
+    padding: 3px 6px;
+}
+
+.cardapio-tabela th.cab.data {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.col-sem     { width: 5%; }
+.col-periodo { width: 12%; }
+
+/* Linha dos pratos */
+.cardapio-tabela td.dia {
+    padding: 8px 8px;
+    height: 205px;
+}
+
+.dia-conteudo {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    height: 100%;
+    text-align: center;
+}
+
+.dia-conteudo p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.45;
+}
+
+.dia-conteudo sup {
+    font-size: 9px;
+}
+
+/* Coluna "Período parcial" */
+.cardapio-tabela td.periodo {
+    text-align: left;
+    vertical-align: top;
+    font-size: 12.5px;
+    padding: 12px 8px;
+}
+
+.cardapio-tabela td.periodo b {
+    display: block;
+    margin-bottom: 14px;
+    font-weight: 700;
+}
+
+.cardapio-tabela td.periodo div {
+    margin-bottom: 10px;
+}
+
+.cardapio-tabela td.periodo .noturno {
+    margin-top: 28px;
+    text-align: center;
+}
+
+.cardapio-tabela td.semana {
+    font-size: 13.5px;
+    vertical-align: middle;
+}
+
+/* ---------- Tabelas de nutrientes ---------- */
+.nutri-titulo {
+    background: #ffffff;
+    border: 1.5px solid #1a1a1a;
+    border-top: none;
+    text-align: center;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 2px 4px;
+    color: #2b2b2b;
+}
+
+.nutri-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.nutri-tabela th,
+.nutri-tabela td {
+    border: 1.5px solid #1a1a1a;
+    text-align: center;
+    font-size: 13px;
+    padding: 2px 4px;
+    color: #2b2b2b;
+}
+
+.nutri-tabela th {
+    background-color: #4a93c9;
+    background-image: repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0,
+        rgba(255, 255, 255, 0) 57px,
+        rgba(255, 255, 255, 0.22) 57px,
+        rgba(255, 255, 255, 0.22) 60px
+    );
+    font-weight: 400;
+    color: #1f2f3d;
+}
+
+/* ---------- Notas de rodapé ---------- */
+.cardapio-notas {
+    padding: 4px 6px 8px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #333333;
+}
+
+/* ---------- Banner de dica do cardápio ---------- */
+.cardapio-banner-dica {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #eef5fc;
+    border: 1.5px solid #bdd7f5;
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: #12305c;
+    line-height: 1.45;
+}
+
+.cardapio-banner-dica .dica-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+/* ---------- Barra de atalhos rápidos dos dias ---------- */
+.cardapio-dias-atalhos {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.dias-atalhos-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #12305c;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.dias-atalhos-botoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.btn-atalho-dia {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #ffffff;
+    border: 1.5px solid #1a4fbf;
+    border-radius: 18px;
+    color: #12305c;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-atalho-dia:hover {
+    background: #1a4fbf;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(26, 79, 191, 0.22);
+}
+
+.btn-atalho-dia.baixado {
+    background: #f0fff4;
+    border-color: #38a169;
+    color: #276749;
+}
+
+.btn-atalho-dia .atalho-check {
+    font-weight: 700;
+    color: #38a169;
+}
+
+/* ---------- Células e cabeçalhos clicáveis do dia ---------- */
+.dia-cab-clicavel {
+    cursor: pointer;
+    transition: filter 0.2s;
+    user-select: none;
+}
+
+.dia-cab-clicavel:hover {
+    filter: brightness(0.92);
+}
+
+.th-dia-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.th-dia-icon {
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+.dia-celula-clicavel {
+    cursor: pointer;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+.dia-celula-clicavel:hover {
+    background-color: #f0f7ff !important;
+}
+
+.dia-itens-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    justify-content: center;
+}
+
+.dia-rodape-celula {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+}
+
+.dia-badge-clique {
+    font-size: 10px;
+    font-weight: 600;
+    color: #1a4fbf;
+    background: #e8f1fc;
+    padding: 2px 7px;
+    border-radius: 10px;
+    border: 1px solid #bfd9f8;
+}
+
+.dia-badge-baixa {
+    font-size: 10px;
+    font-weight: 700;
+    color: #22543d;
+    background: #c6f6d5;
+    padding: 2px 7px;
+    border-radius: 10px;
+    border: 1px solid #9ae6b4;
+}
+
+.btn-dia-acao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 9px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #1a4fbf, #12305c);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(18, 48, 92, 0.22);
+    transition: all 0.2s ease;
+}
+
+.btn-dia-acao:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(18, 48, 92, 0.35);
+}
+
+/* ---------- Overlay de Itens do Dia ---------- */
+.dia-itens-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(10, 30, 65, 0.82);
+    backdrop-filter: blur(2px);
+}
+
+.dia-itens-overlay.aberto {
+    display: flex;
+    animation: cardapioFade 0.22s ease;
+}
+
+.dia-itens-modal {
+    position: relative;
+    width: 100%;
+    max-width: 660px;
+    max-height: 94vh;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    animation: diaModalScale 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes diaModalScale {
+    from { transform: scale(0.95); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+.dia-itens-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: #ffffff;
+    border-bottom: 1.5px solid #e4e8ef;
+}
+
+.dia-itens-subtitulo {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: #1a4fbf;
+    text-transform: uppercase;
+}
+
+.dia-itens-titulo {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #12305c;
+    margin: 2px 0 0 0;
+}
+
+.dia-itens-titulo span {
+    color: #1a4fbf;
+}
+
+.dia-itens-fechar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: 1.5px solid #e4e8ef;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #12305c;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.dia-itens-fechar:hover {
+    background: #f7f9fc;
+    border-color: #1a4fbf;
+    color: #1a4fbf;
+}
+
+/* Seletor de abas de dia */
+.dia-abas-seletor {
+    display: flex;
+    gap: 6px;
+    padding: 10px 18px;
+    background: #f7f9fc;
+    border-bottom: 1px solid #eef2f7;
+    overflow-x: auto;
+}
+
+.dia-aba-btn {
+    padding: 6px 14px;
+    background: #ffffff;
+    border: 1.5px solid #dbe2ed;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #4a5568;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.dia-aba-btn:hover {
+    border-color: #1a4fbf;
+    color: #12305c;
+}
+
+.dia-aba-btn.ativa {
+    background: #12305c;
+    border-color: #12305c;
+    color: #ffffff;
+    box-shadow: 0 3px 8px rgba(18, 48, 92, 0.25);
+}
+
+.dia-aba-btn.tem-baixa:not(.ativa) {
+    background: #f0fff4;
+    border-color: #9ae6b4;
+    color: #276749;
+}
+
+/* Corpo da modal */
+.dia-itens-corpo {
+    padding: 18px 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Card dos pratos */
+.dia-pratos-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+}
+
+.pratos-card-titulo {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #12305c;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.pratos-card-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.prato-pill {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: #334155;
+    font-weight: 500;
+}
+
+/* Status alerta */
+.dia-status-alerta {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.dia-status-alerta.status-pendente {
+    background: #fffaf0;
+    border: 1.5px solid #feebc8;
+    color: #7b341e;
+}
+
+.dia-status-alerta.status-sucesso {
+    background: #f0fff4;
+    border: 1.5px solid #9ae6b4;
+    color: #22543d;
+}
+
+.dia-status-alerta .status-icone {
+    font-size: 20px;
+    flex-shrink: 0;
+    line-height: 1.2;
+}
+
+.dia-status-alerta .status-texto strong {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 13.5px;
+}
+
+.dia-status-alerta .status-texto span {
+    font-size: 12px;
+    opacity: 0.95;
+}
+
+/* Seção de lista de itens */
+.itens-secao-header {
+    margin-bottom: 12px;
+}
+
+.itens-secao-titulo {
+    font-size: 15px;
+    font-weight: 700;
+    color: #12305c;
+    margin: 0 0 3px 0;
+}
+
+.itens-secao-desc {
+    font-size: 12.5px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Grade de cards de itens */
+.itens-cards-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.item-card-linha {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 14px;
+    transition: all 0.2s ease;
+}
+
+.item-card-linha:hover {
+    border-color: #1a4fbf;
+    box-shadow: 0 3px 10px rgba(26, 79, 191, 0.08);
+}
+
+.item-card-linha.estoque-insuficiente {
+    border-color: #feb2b2;
+    background: #fff5f5;
+}
+
+.item-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+}
+
+.item-card-nome {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.item-card-estoque-badge {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.item-card-estoque-badge.em-estoque strong {
+    color: #1a4fbf;
+}
+
+.item-card-estoque-badge.sem-estoque strong {
+    color: #e53e3e;
+}
+
+/* Controle de quantidade */
+.item-card-controle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.btn-qty-circ {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1.5px solid #cbd5e1;
+    background: #f8fafc;
+    color: #12305c;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+    line-height: 1;
+}
+
+.btn-qty-circ:hover {
+    background: #1a4fbf;
+    border-color: #1a4fbf;
+    color: #ffffff;
+}
+
+.input-qty-box {
+    width: 52px;
+    height: 36px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    color: #12305c;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    background: #ffffff;
+    padding: 0 4px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input-qty-box:focus {
+    border-color: #1a4fbf;
+    box-shadow: 0 0 0 3px rgba(26, 79, 191, 0.15);
+}
+
+.item-unidade-txt {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    min-width: 44px;
+}
+
+/* Rodapé de ações abaixo da lista */
+.dia-itens-rodape-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 14px;
+    border-top: 1.5px solid #e2e8f0;
+}
+
+.btn-acao-baixa {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex: 2;
+    min-width: 170px;
+    padding: 13px 18px;
+    background: linear-gradient(135deg, #1a4fbf, #12305c);
+    border: none;
+    border-radius: 14px;
+    color: #ffffff;
+    font-size: 14.5px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(18, 48, 92, 0.3);
+    transition: all 0.2s ease;
+}
+
+.btn-acao-baixa:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(18, 48, 92, 0.4);
+}
+
+.btn-acao-imprimir {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex: 1.5;
+    min-width: 150px;
+    padding: 13px 18px;
+    background: #ffffff;
+    border: 2px solid #1a4fbf;
+    border-radius: 14px;
+    color: #1a4fbf;
+    font-size: 14.5px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(26, 79, 191, 0.12);
+    transition: all 0.2s ease;
+}
+
+.btn-acao-imprimir:hover {
+    background: #1a4fbf;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(26, 79, 191, 0.25);
+}
+
+.btn-acao-voltar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex: 1;
+    min-width: 130px;
+    padding: 13px 14px;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+    color: #475569;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-acao-voltar:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+/* ---------- Comprovante de Impressão ---------- */
+.comprovante-baixa-print {
+    display: none;
+}
+
+@media print {
+    /* Ocultar elementos da tela durante a impressão */
+    body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body > *:not(#comprovanteBaixaPrint) {
+        display: none !important;
+    }
+
+    .comprovante-baixa-print {
+        display: block !important;
+        width: 100% !important;
+        max-width: 800px !important;
+        margin: 0 auto !important;
+        padding: 15mm !important;
+        box-sizing: border-box !important;
+        font-family: Arial, Helvetica, sans-serif !important;
+        color: #111827 !important;
+        background: #ffffff !important;
+    }
+
+    .comprovante-folha {
+        border: 2px solid #111827;
+        padding: 16px;
+        background: #ffffff;
+    }
+
+    .comprovante-cabecalho {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 14px;
+    }
+
+    .comprovante-logo-lado {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .comprovante-escudo {
+        width: 64px;
+        height: auto;
+    }
+
+    .comprovante-escola-nome {
+        font-size: 20px;
+        font-weight: 800;
+        color: #12305c;
+        margin: 0 0 2px 0;
+        text-transform: uppercase;
+    }
+
+    .comprovante-orgao {
+        font-size: 11px;
+        color: #374151;
+        line-height: 1.35;
+    }
+
+    .comprovante-badge-lado {
+        text-align: right;
+    }
+
+    .comprovante-tag-titulo {
+        display: inline-block;
+        padding: 4px 10px;
+        background: #12305c;
+        color: #ffffff;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.6px;
+        margin-bottom: 4px;
+    }
+
+    .comprovante-meta {
+        font-size: 11.5px;
+        color: #374151;
+        line-height: 1.4;
+    }
+
+    .comprovante-linha-divisoria {
+        height: 2px;
+        background: #111827;
+        margin: 10px 0 14px;
+    }
+
+    .comprovante-secao-dia {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        padding: 10px 14px;
+        margin-bottom: 14px;
+    }
+
+    .comprovante-dia-destaque h2 {
+        font-size: 16px;
+        font-weight: 800;
+        color: #12305c;
+        margin: 0 0 4px 0;
+    }
+
+    .comprovante-dia-sub {
+        font-size: 11.5px;
+        color: #4b5563;
+    }
+
+    .comprovante-pratos-box {
+        font-size: 11.5px;
+        color: #1f2937;
+        max-width: 55%;
+    }
+
+    .comprovante-pratos-box ul {
+        margin: 4px 0 0 16px;
+        padding: 0;
+    }
+
+    .comprovante-pratos-box li {
+        margin-bottom: 2px;
+    }
+
+    .comprovante-tabela-titulo {
+        font-size: 12px;
+        font-weight: 800;
+        color: #111827;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .comprovante-tabela {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 14px;
+        font-size: 12px;
+    }
+
+    .comprovante-tabela th,
+    .comprovante-tabela td {
+        border: 1.5px solid #111827;
+        padding: 6px 8px;
+    }
+
+    .comprovante-tabela th {
+        background: #e5e7eb;
+        color: #111827;
+        font-weight: 800;
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    .comprovante-resumo-bloco {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px 16px;
+        font-size: 11.5px;
+        background: #f9fafb;
+        border: 1px solid #d1d5db;
+        padding: 8px 12px;
+        margin-bottom: 20px;
+    }
+
+    .comprovante-assinaturas-grid {
+        display: flex;
+        justify-content: space-around;
+        gap: 30px;
+        margin: 24px 0 14px;
+    }
+
+    .comprovante-assinatura-col {
+        flex: 1;
+        text-align: center;
+    }
+
+    .linha-ass {
+        border-top: 1.5px solid #111827;
+        margin-bottom: 6px;
+    }
+
+    .nome-ass {
+        font-size: 12px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .cargo-ass {
+        font-size: 10.5px;
+        color: #4b5563;
+    }
+
+    .comprovante-rodape-fim {
+        text-align: center;
+        border-top: 1px solid #cbd5e1;
+        padding-top: 8px;
+        font-size: 10px;
+        color: #6b7280;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+}
+
+/* ---------- Celular ---------- */
+@media (max-width: 600px) {
+    .cardapio-overlay { padding: 8px; }
+    .cardapio-corpo   { padding: 8px; }
+    .cardapio-topo-titulo { font-size: 17px; }
+
+    .dia-itens-overlay { padding: 8px; }
+    .dia-itens-modal { max-height: 96vh; border-radius: 16px; }
+    .dia-itens-topo { padding: 12px 14px; }
+    .dia-itens-titulo { font-size: 17px; }
+    .dia-itens-corpo { padding: 12px 14px; }
+    .item-card-linha { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .item-card-controle { width: 100%; justify-content: flex-end; }
+    .dia-itens-rodape-acoes { flex-direction: column; }
+    .btn-acao-baixa, .btn-acao-imprimir, .btn-acao-voltar { width: 100%; }
+}
+
+/* =====================================================================
+   SINCRONIZAÇÃO E CONEXÃO ENTRE USUÁRIO E ADMINISTRADOR
+   ===================================================================== */
+
+/* ---------- Banner de Sincronização entre Usuário e Administrador ---------- */
+.cardapio-banner-sync {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.cardapio-banner-sync.sync-usuario {
+    background: #fffaf0;
+    border: 1.5px solid #feebc8;
+    color: #7b341e;
+}
+
+.cardapio-banner-sync.sync-admin {
+    background: #ebf8ff;
+    border: 1.5px solid #bee3f8;
+    color: #2b6cb0;
+}
+
+.cardapio-banner-sync.sync-neutro {
+    background: #f0f7ff;
+    border: 1.5px solid #c8defa;
+    color: #12305c;
+}
+
+.sync-info-lado {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sync-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.sync-textos strong {
+    display: block;
+    font-size: 13.5px;
+    margin-bottom: 2px;
+}
+
+.sync-textos span {
+    font-size: 12px;
+    opacity: 0.95;
+}
+
+.btn-sync-reset {
+    padding: 6px 14px;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    color: #c53030;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.btn-sync-reset:hover {
+    background: #fff5f5;
+    border-color: #feb2b2;
+    transform: translateY(-1px);
+}
+
+/* Badge de item ajustado pelo Usuário */
+.item-badge-ajuste {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #9c4221;
+    background: #feebc8;
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 1px solid #fbd38d;
+    margin-top: 3px;
+    align-self: flex-start;
+}
+
+.btn-item-reverter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid #dd6b20;
+    background: #ffffff;
+    color: #c05621;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    line-height: 1;
+    transition: all 0.15s;
+    padding: 0;
+}
+
+.btn-item-reverter:hover {
+    background: #c05621;
+    color: #ffffff;
+}
+
+/* Badge no Menu Principal (admin/menu.html e usuario/menu.html) */
+.cv-cardapio-status-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 12px;
+    margin-left: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    vertical-align: middle;
+}
+
+.cv-cardapio-status-badge.badge-alterado {
+    background: #fffaf0;
+    color: #c05621;
+    border: 1px solid #fbd38d;
+}
+
+.cv-cardapio-status-badge.badge-baixa {
+    background: #f0fff4;
+    color: #22543d;
+    border: 1px solid #9ae6b4;
+}
+
+.cv-cardapio-status-badge.badge-conectado {
+    background: #ebf8ff;
+    color: #2b6cb0;
+    border: 1px solid #bee3f8;
+}
+
+/* Botão de edição dos pratos do dia */
+.btn-editar-pratos-dia {
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    color: #12305c;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-editar-pratos-dia:hover {
+    border-color: #1a4fbf;
+    color: #1a4fbf;
+    background: #f8fafc;
+}
+
+/* Painel de Edição de Pratos e Ingredientes */
+.editor-pratos-painel {
+    background: #f8fafc;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+    animation: diaModalScale 0.2s ease;
+}
+
+.editor-pratos-painel h4 {
+    margin: 0 0 4px 0;
+    color: #12305c;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.editor-pratos-painel p {
+    margin: 0 0 12px 0;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.editor-pratos-textarea {
+    width: 100%;
+    min-height: 80px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-family: inherit;
+    font-size: 13px;
+    color: #1e293b;
+    box-sizing: border-box;
+    margin-bottom: 14px;
+    resize: vertical;
+}
+
+.editor-pratos-textarea:focus {
+    border-color: #1a4fbf;
+    outline: none;
+}
+
+.editor-ingredientes-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.editor-ing-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 12.5px;
+}
+
+.editor-ing-nome {
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.editor-ing-meta {
+    font-size: 12px;
+    color: #718096;
+}
+
+.btn-remove-ing {
+    background: #fff5f5;
+    border: 1px solid #fed7d7;
+    color: #c53030;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 11px;
+    padding: 3px 6px;
+    transition: all 0.15s;
+}
+
+.btn-remove-ing:hover {
+    background: #c53030;
+    color: #fff;
+}
+
+.editor-add-ing-grid {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.editor-add-input {
+    flex: 2;
+    min-width: 120px;
+    padding: 6px 10px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+.editor-add-qty {
+    flex: 1;
+    min-width: 60px;
+    padding: 6px 8px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.editor-add-un {
+    flex: 1;
+    min-width: 70px;
+    padding: 6px 8px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+.btn-add-ing {
+    padding: 6px 12px;
+    background: #1a4fbf;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-add-ing:hover {
+    background: #12305c;
+}
+
+.editor-acoes-botoes {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.btn-editor-salvar {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #1a4fbf, #12305c);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-editor-cancelar {
+    padding: 8px 14px;
+    background: #e2e8f0;
+    color: #4a5568;
+    border: none;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-editor-restaurar-dia {
+    padding: 8px 14px;
+    background: #fff5f5;
+    color: #c53030;
+    border: 1px solid #fed7d7;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: auto;
+}
+
