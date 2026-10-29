@@ -27,9 +27,103 @@ const DEFAULT_PRODUCTS = [
 
 const DEFAULT_ADMIN = { cpf: "12345678900", senha: "admin123" };
 const DEFAULT_USER = { cpf: "98765432100", senha: "usuario123" };
+const DEFAULT_COZINHEIRAS = ["Ana Maria", "Rose", "Paula", "Fabiana"];
+const SYNC_PREFIX = "__CANTINA_SYNC__:";
+const SYNC_KEYS = [
+    "cozinheiras", "cozinheirasExtras", "cozinheirasRemovidas",
+    "products", "movimentacoes", "orders", "logs", "cart",
+    "baixasCardapio", "cardapioDiaQuantidades", "cardapioQuantidadesMeta",
+    "cardapioData", "cardapioUltimaAlteracao",
+    "loggedIn", "adminNome", "usuarioNome"
+];
+
+function lerEstadoWindowName() {
+    try {
+        if (typeof window !== "undefined" && typeof window.name === "string" && window.name.indexOf(SYNC_PREFIX) === 0) {
+            return JSON.parse(window.name.slice(SYNC_PREFIX.length)) || {};
+        }
+    } catch (e) {}
+    return {};
+}
+
+function salvarEstadoWindowName() {
+    try {
+        if (typeof window === "undefined") return;
+        const state = lerEstadoWindowName();
+        SYNC_KEYS.forEach(k => {
+            const val = localStorage.getItem(k);
+            if (val !== null) {
+                state[k] = val;
+            } else {
+                delete state[k];
+            }
+        });
+        window.name = SYNC_PREFIX + JSON.stringify(state);
+    } catch (e) {}
+}
+
+function sincronizarStorageEntrePaginas() {
+    try {
+        const winState = lerEstadoWindowName();
+
+        // Mesclar cozinheiras entre localStorage, window.name e cookie antes de sobrescrever
+        const listasParaMesclar = [];
+        try {
+            const lsCoz = JSON.parse(localStorage.getItem("cozinheiras") || "null");
+            if (Array.isArray(lsCoz)) listasParaMesclar.push(lsCoz);
+        } catch (e) {}
+        try {
+            const wnCoz = JSON.parse(winState.cozinheiras || "null");
+            if (Array.isArray(wnCoz)) listasParaMesclar.push(wnCoz);
+        } catch (e) {}
+        try {
+            const matchCookie = document.cookie.match(/(?:^|;\s*)cantina_cozinheiras=([^;]+)/);
+            if (matchCookie) {
+                const ckCoz = JSON.parse(decodeURIComponent(matchCookie[1]));
+                if (Array.isArray(ckCoz)) listasParaMesclar.push(ckCoz);
+            }
+        } catch (e) {}
+
+        // Sincronizar demais chaves do window.name para o localStorage atual
+        Object.keys(winState).forEach(k => {
+            if (k !== "cozinheiras" && winState[k] !== undefined && winState[k] !== null) {
+                localStorage.setItem(k, winState[k]);
+            }
+        });
+
+        let removidas = [];
+        try {
+            removidas = JSON.parse(localStorage.getItem("cozinheirasRemovidas") || winState.cozinheirasRemovidas || "[]") || [];
+        } catch (e) {
+            removidas = [];
+        }
+
+        const unificada = [];
+        const adicionarSeNaoExiste = (nome) => {
+            const limpo = (nome || "").trim();
+            if (!limpo) return;
+            if (removidas.some(r => r.toLowerCase() === limpo.toLowerCase())) return;
+            if (!unificada.some(u => u.toLowerCase() === limpo.toLowerCase())) {
+                unificada.push(limpo);
+            }
+        };
+
+        DEFAULT_COZINHEIRAS.forEach(adicionarSeNaoExiste);
+        listasParaMesclar.forEach(lista => lista.forEach(adicionarSeNaoExiste));
+
+        if (unificada.length > 0) {
+            const jsonUnificada = JSON.stringify(unificada);
+            localStorage.setItem("cozinheiras", jsonUnificada);
+            document.cookie = "cantina_cozinheiras=" + encodeURIComponent(jsonUnificada) + "; path=/; max-age=31536000; SameSite=Lax";
+        }
+
+        salvarEstadoWindowName();
+    } catch (e) {}
+}
 
 // ===== INICIALIZAÇÃO DO localStorage =====
 function initStorage() {
+    sincronizarStorageEntrePaginas();
     if (!localStorage.getItem("products")) {
         localStorage.setItem("products", JSON.stringify(DEFAULT_PRODUCTS));
     } else {
@@ -73,6 +167,10 @@ function initStorage() {
     }
     if (!localStorage.getItem("cardapioQuantidadesMeta")) {
         localStorage.setItem("cardapioQuantidadesMeta", JSON.stringify({}));
+    }
+    if (!localStorage.getItem("cozinheiras")) {
+        localStorage.setItem("cozinheiras", JSON.stringify(DEFAULT_COZINHEIRAS));
+    salvarEstadoWindowName();
     }
 }
 
@@ -144,6 +242,7 @@ function getLogs() {
 
 function saveLogs(logs) {
     localStorage.setItem("logs", JSON.stringify(logs));
+    salvarEstadoWindowName();
 }
 
 function getLoggedInName() {
@@ -164,6 +263,7 @@ function registrarLog(acao, detalhes) {
     const agora = new Date();
     logs.push({
         id: Date.now() + Math.random(),
+        timestamp: Date.now(),
         data: agora.toLocaleDateString("pt-BR"),
         hora: agora.toLocaleTimeString("pt-BR"),
         usuario: getLoggedInName(),
@@ -181,6 +281,7 @@ function getProducts() {
 
 function saveProducts(products) {
     localStorage.setItem("products", JSON.stringify(products));
+    salvarEstadoWindowName();
 }
 
 function getProductById(id) {
@@ -196,12 +297,14 @@ function getMovimentacoes() {
 
 function saveMovimentacoes(mov) {
     localStorage.setItem("movimentacoes", JSON.stringify(mov));
+    salvarEstadoWindowName();
 }
 
 function registrarMovimentacao(tipo, produto, quantidade, motivo) {
     const mov = getMovimentacoes();
     mov.push({
         id: Date.now() + Math.random(),
+        timestamp: Date.now(),
         tipo: tipo,            // "entrada" | "saida"
         produto: produto,
         quantidade: quantidade,
@@ -210,6 +313,35 @@ function registrarMovimentacao(tipo, produto, quantidade, motivo) {
         motivo: motivo || getLoggedInName()
     });
     saveMovimentacoes(mov);
+}
+
+function obterTimestampMovimentacao(m) {
+    if (!m) return 0;
+    if (typeof m.timestamp === "number" && m.timestamp > 0) return m.timestamp;
+    if (typeof m.id === "number" && m.id > 1000000000000) return Math.floor(m.id);
+    if (typeof m.data === "string") {
+        const match = m.data.match(/(\d{2})\/(\d{2})\/(\d{4})(?:[,\s]+(\d{2}):(\d{2})(?::(\d{2}))?)?/);
+        if (match) {
+            const dia = parseInt(match[1], 10);
+            const mes = parseInt(match[2], 10) - 1;
+            const ano = parseInt(match[3], 10);
+            const hora = parseInt(match[4] || "0", 10);
+            const min = parseInt(match[5] || "0", 10);
+            const seg = parseInt(match[6] || "0", 10);
+            return new Date(ano, mes, dia, hora, min, seg).getTime();
+        }
+    }
+    return 0;
+}
+
+function getMovimentacoesUltimosDias(dias = 7) {
+    const mov = getMovimentacoes();
+    const agora = Date.now();
+    const limite = agora - (dias * 24 * 60 * 60 * 1000);
+    return mov.filter(m => {
+        const ts = obterTimestampMovimentacao(m);
+        return ts >= limite && ts <= agora + 60000;
+    });
 }
 
 // ===== HISTÓRICO DE PEDIDOS (usado pelos relatórios) =====
@@ -356,6 +488,8 @@ function removeStock(id) {
         const changeEl = document.getElementById(`change-qty-${id}`);
         if (changeEl) changeEl.textContent = '0';
         updateConfirmButton("saida");
+        registrarMovimentacao("saida", product.nome, qty, "Saída manual");
+        registrarLog("saida", `Saída de ${qty} unidade(s) do produto "${product.nome}" do estoque`);
         showToast(`${product.nome}: -${qty} unidades removidas!`);
     } else {
         alert("Erro ao remover estoque.");
@@ -595,6 +729,7 @@ function getOrders() {
 
 function saveOrders(orders) {
     localStorage.setItem("orders", JSON.stringify(orders));
+    salvarEstadoWindowName();
 }
 
 function getOrderById(id) {
@@ -847,10 +982,133 @@ function voltarListaPedidos() {
 }
 
 // Lista oficial de colaboradoras da cantina / cozinha
-const LISTA_USUARIOS = ["Fátima", "Ana", "Elaine", "Lúcia", "Lurdes"];
+const LISTA_USUARIOS = ["Ana Maria", "Rose", "Paula", "Fabiana"];
 
 function getListaUsuarios() {
-    return LISTA_USUARIOS;
+    sincronizarStorageEntrePaginas();
+    try {
+        const data = localStorage.getItem("cozinheiras");
+        if (data) {
+            const parsed = JSON.parse(data);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                return parsed;
+            }
+        }
+    } catch (e) {}
+    return [...LISTA_USUARIOS];
+}
+
+function saveListaUsuarios(lista) {
+    localStorage.setItem("cozinheiras", JSON.stringify(lista));
+    document.cookie = "cantina_cozinheiras=" + encodeURIComponent(JSON.stringify(lista)) + "; path=/; max-age=31536000; SameSite=Lax";
+    salvarEstadoWindowName();
+}
+
+function getInicialCozinheira(nome, listaCompleta, indiceAtual) {
+    const limpo = (nome || "").trim();
+    if (!limpo) return "?";
+    const primeira = limpo.charAt(0).toUpperCase();
+    if (Array.isArray(listaCompleta) && typeof indiceAtual === "number") {
+        const conflitoAnterior = listaCompleta.slice(0, indiceAtual).some(
+            n => (n || "").trim().charAt(0).toUpperCase() === primeira
+        );
+        if (conflitoAnterior && limpo.length > 1) {
+            return primeira + limpo.charAt(1).toLowerCase();
+        }
+    }
+    return primeira;
+}
+
+function adicionarCozinheira(nome) {
+    const nomeLimpo = (nome || "").trim();
+    if (!nomeLimpo) {
+        return { sucesso: false, mensagem: "Por favor, digite o nome da cozinheira." };
+    }
+
+    const lista = getListaUsuarios();
+    const jaExiste = lista.some(u => u.toLowerCase() === nomeLimpo.toLowerCase());
+    if (jaExiste) {
+        return { sucesso: false, mensagem: `A cozinheira "${nomeLimpo}" já está cadastrada!` };
+    }
+
+    lista.push(nomeLimpo);
+    try {
+        const removidas = JSON.parse(localStorage.getItem("cozinheirasRemovidas") || "[]") || [];
+        const novasRemovidas = removidas.filter(r => r.toLowerCase() !== nomeLimpo.toLowerCase());
+        localStorage.setItem("cozinheirasRemovidas", JSON.stringify(novasRemovidas));
+    } catch (e) {}
+    saveListaUsuarios(lista);
+    registrarLog("alteracao", `Cadastrou nova cozinheira: "${nomeLimpo}"`);
+    return { sucesso: true, nome: nomeLimpo, mensagem: `Cozinheira "${nomeLimpo}" cadastrada com sucesso!` };
+}
+
+function removerCozinheira(nome) {
+    const nomeLimpo = (nome || "").trim();
+    const lista = getListaUsuarios();
+    if (lista.length <= 1) {
+        return { sucesso: false, mensagem: "É necessário manter pelo menos uma cozinheira cadastrada." };
+    }
+    const novaLista = lista.filter(u => u.toLowerCase() !== nomeLimpo.toLowerCase());
+    if (novaLista.length === lista.length) {
+        return { sucesso: false, mensagem: "Cozinheira não encontrada." };
+    }
+    try {
+        const removidas = JSON.parse(localStorage.getItem("cozinheirasRemovidas") || "[]") || [];
+        if (!removidas.some(r => r.toLowerCase() === nomeLimpo.toLowerCase())) {
+            removidas.push(nomeLimpo);
+        }
+        localStorage.setItem("cozinheirasRemovidas", JSON.stringify(removidas));
+    } catch (e) {}
+    saveListaUsuarios(novaLista);
+    registrarLog("alteracao", `Removeu a cozinheira: "${nomeLimpo}"`);
+    return { sucesso: true, mensagem: `Cozinheira "${nomeLimpo}" removida.` };
+}
+
+function renderizarCardsUsuarios(containerId, selectId, funcaoClick) {
+    const container = document.getElementById(containerId);
+    const select = selectId ? document.getElementById(selectId) : null;
+    const usuarios = getListaUsuarios();
+
+    if (container) {
+        let html = "";
+        usuarios.forEach((nome, idx) => {
+            const inicial = getInicialCozinheira(nome, usuarios, idx);
+            const nomeAttr = nome.replace(/"/g, "&quot;");
+            const nomeJs = nome.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+            html += `
+                <button type="button" class="cv-user-card" data-nome="${nomeAttr}" onclick="${funcaoClick}('${nomeJs}', this)">
+                    <div class="cv-user-avatar">
+                        <span class="cv-user-initial">${inicial}</span>
+                        <span class="cv-user-badge">👩‍🍳</span>
+                    </div>
+                    <div class="cv-user-info">
+                        <span class="cv-user-name">${nome}</span>
+                        <span class="cv-user-sub">Colaboradora da Cozinha</span>
+                    </div>
+                    <div class="cv-user-indicator">
+                        <span class="cv-user-radio">
+                            <svg class="cv-check-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </span>
+                        <span class="cv-user-arrow">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#1a4fbf" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6 L16 12 L9 18"/></svg>
+                        </span>
+                    </div>
+                </button>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    if (select) {
+        let optionsHtml = '<option value="" disabled selected>Escolha seu nome...</option>';
+        usuarios.forEach(nome => {
+            const nomeAttr = nome.replace(/"/g, "&quot;");
+            optionsHtml += `<option value="${nomeAttr}">${nome}</option>`;
+        });
+        select.innerHTML = optionsHtml;
+    }
 }
 
 // Lista oficial de administradoras da cantina / gestão
@@ -870,6 +1128,7 @@ function fazerLogin(cpf, senha, tipo, nomeUsuario) {
         const logs = getLogs();
         logs.push({
             id: Date.now() + Math.random(),
+        timestamp: Date.now(),
             data: agora.toLocaleDateString("pt-BR"),
             hora: agora.toLocaleTimeString("pt-BR"),
             usuario: nomeFinal,
@@ -890,6 +1149,7 @@ function fazerLogin(cpf, senha, tipo, nomeUsuario) {
         const logs = getLogs();
         logs.push({
             id: Date.now() + Math.random(),
+        timestamp: Date.now(),
             data: agora.toLocaleDateString("pt-BR"),
             hora: agora.toLocaleTimeString("pt-BR"),
             usuario: nomeFinal,
@@ -916,6 +1176,7 @@ function logout() {
     localStorage.removeItem("usuarioNome");
     localStorage.removeItem("adminNome");
     localStorage.removeItem("cart");
+    salvarEstadoWindowName();
     showToast("👋 Sessão encerrada.");
     const isSubfolder = window.location.pathname.includes("/admin/") || window.location.pathname.includes("/usuario/");
     window.location.href = isSubfolder ? "../index.html" : "index.html";
@@ -957,6 +1218,7 @@ toast.innerHTML = message;
 }
 
 // ===== INIT ON PAGE LOAD =====
+initStorage();
 document.addEventListener("DOMContentLoaded", function() {
     initStorage();
     updateCartBadge();

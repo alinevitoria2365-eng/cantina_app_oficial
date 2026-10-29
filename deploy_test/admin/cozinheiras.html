@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Cadastrar Nova Cozinheira</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .cadastro-box {
+            background: #f7fafc;
+            border: 1.5px solid #e4e8ef;
+            border-radius: 18px;
+            padding: 18px 16px;
+            margin: 16px 0 20px;
+            text-align: left;
+        }
+        .cadastro-box label {
+            color: #12305c;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .cadastro-input {
+            width: 100%;
+            padding: 14px 16px !important;
+            border: 1.5px solid #dbe1ea !important;
+            border-radius: 12px !important;
+            font-size: 16px !important;
+            background: #ffffff !important;
+            color: #12305c !important;
+            margin-bottom: 12px;
+        }
+        .cadastro-input:focus {
+            border-color: #1a4fbf !important;
+            box-shadow: 0 0 0 3px rgba(26, 79, 191, 0.15) !important;
+        }
+        .cozinheiras-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 18px 0 10px;
+        }
+        .cozinheiras-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #12305c;
+        }
+        .cozinheiras-count {
+            background: #eef4fc;
+            color: #1a4fbf;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid #dce8fa;
+        }
+        .btn-remove-cozinheira {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            color: #c53030;
+            border-radius: 10px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+        .btn-remove-cozinheira:hover {
+            background: #fed7d7;
+        }
+    </style>
+</head>
+<body class="cv-page-body">
+    <div class="container cv-card">
+
+        <!-- LOGOTIPO CORONEL VENÂNCIO -->
+        <div class="cv-header">
+            <img class="cv-shield" src="../logocv.png" alt="Logotipo Coronel Venâncio">
+            <span class="cv-logo-title">Coronel Venâncio</span>
+            <span class="cv-logo-underline"></span>
+        </div>
+
+        <h2 class="cv-page-title">Cadastrar Nova Cozinheira</h2>
+        <div class="cv-divider"><span></span><i></i><span></span></div>
+        <p class="cv-page-subtitle">O nome cadastrado aparecerá no login de Usuário</p>
+
+        <!-- FORMULÁRIO DE CADASTRO -->
+        <div class="cadastro-box">
+            <label for="nome-cozinheira">Nome da Cozinheira:</label>
+            <input type="text" id="nome-cozinheira" class="cadastro-input" placeholder="Ex: Lurdes, Carla, Joana..." maxlength="40" autocomplete="off">
+            <button type="button" class="btn btn-primary" onclick="salvarNovaCozinheira()" style="padding:14px 20px;font-size:17px;">
+                + Cadastrar Cozinheira
+            </button>
+        </div>
+
+        <!-- LISTA DE COZINHEIRAS CADASTRADAS -->
+        <div class="cozinheiras-header">
+            <span class="cozinheiras-title">Cozinheiras Cadastradas</span>
+            <span class="cozinheiras-count" id="total-cozinheiras">0</span>
+        </div>
+
+        <div class="cv-user-cards-list" id="lista-cozinheiras-admin"></div>
+
+        <div class="footer-bar cv-back-bar">
+            <button type="button" class="btn btn-outline cv-back-btn" onclick="window.location.href='menu.html'">
+                <span class="cv-back-icon">
+                    <svg viewBox="0 0 24 24" width="22" height="20" fill="none" stroke="#12305c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12 H4 M4 12 L10 6 M4 12 L10 18"/></svg>
+                </span>
+                <span class="cv-back-divider"></span>
+                <span class="cv-back-text">Voltar ao Menu</span>
+            </button>
+        </div>
+
+        <div class="cv-footer">
+            <div class="cv-footer-line"></div>
+            <span class="cv-footer-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#1a4fbf" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 2 V9 M3 2 V7 C3 8.5 4 9 5 9 M7 2 V7 C7 8.5 6 9 5 9"/>
+                    <path d="M5 9 V22"/>
+                    <path d="M17 2 C14.2 2 14 6 14 8.5 C14 10 15 10.5 16.5 10.5 V22"/>
+                    <path d="M16.5 10.5 V2"/>
+                </svg>
+            </span>
+            <div class="cv-footer-line"></div>
+        </div>
+        <p class="cv-footer-text">Qualidade, organização e cuidado em cada refeição.</p>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (getLoggedInType() !== "admin") {
+                window.location.href = "login.html";
+                return;
+            }
+            renderizarListaAdminCozinheiras();
+
+            const input = document.getElementById("nome-cozinheira");
+            if (input) {
+                input.addEventListener("keypress", function(e) {
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                        salvarNovaCozinheira();
+                    }
+                });
+            }
+        });
+
+        function renderizarListaAdminCozinheiras() {
+            const container = document.getElementById("lista-cozinheiras-admin");
+            const countEl = document.getElementById("total-cozinheiras");
+            const usuarios = getListaUsuarios();
+
+            if (countEl) {
+                countEl.textContent = `${usuarios.length} ativa(s)`;
+            }
+
+            if (!container) return;
+
+            let html = "";
+            usuarios.forEach((nome, idx) => {
+                const inicial = getInicialCozinheira(nome, usuarios, idx);
+                const nomeJs = nome.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+                html += `
+                    <div class="cv-user-card" style="cursor:default;">
+                        <div class="cv-user-avatar">
+                            <span class="cv-user-initial">${inicial}</span>
+                            <span class="cv-user-badge">👩‍🍳</span>
+                        </div>
+                        <div class="cv-user-info">
+                            <span class="cv-user-name">${nome}</span>
+                            <span class="cv-user-sub">Colaboradora da Cozinha</span>
+                        </div>
+                        ${usuarios.length > 1 ? `
+                        <button type="button" class="btn-remove-cozinheira" title="Remover ${nome}" onclick="excluirCozinheira('${nomeJs}')">
+                            🗑️
+                        </button>
+                        ` : ""}
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function salvarNovaCozinheira() {
+            const input = document.getElementById("nome-cozinheira");
+            if (!input) return;
+
+            const resultado = adicionarCozinheira(input.value);
+            if (!resultado.sucesso) {
+                alert(resultado.mensagem);
+                input.focus();
+                return;
+            }
+
+            input.value = "";
+            renderizarListaAdminCozinheiras();
+            showToast(`✅ ${resultado.mensagem}`);
+        }
+
+        function excluirCozinheira(nome) {
+            if (!confirm(`Deseja remover "${nome}" da lista de cozinheiras?`)) {
+                return;
+            }
+            const resultado = removerCozinheira(nome);
+            if (!resultado.sucesso) {
+                alert(resultado.mensagem);
+                return;
+            }
+            renderizarListaAdminCozinheiras();
+            showToast(`🗑️ ${resultado.mensagem}`);
+        }
+    </script>
+</body>
+</html>
+

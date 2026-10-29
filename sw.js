@@ -1,4 +1,4 @@
-const CACHE_NAME = "cantina-v2";
+const CACHE_NAME = "cantina-v4";
 
 self.addEventListener("install", () => {
   self.skipWaiting();
@@ -27,7 +27,7 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(
     (async () => {
       try {
-        const response = await fetch(event.request);
+        const response = await fetch(event.request, { cache: "no-store" });
 
         if (response.ok) {
           const cache = await caches.open(CACHE_NAME);

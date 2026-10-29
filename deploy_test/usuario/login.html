@@ -191,6 +191,22 @@
     <script src="../js/app.js"></script>
     <script>
         let usuarioSelecionado = null;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            window.addEventListener("pageshow", function() {
+                if (typeof renderizarCardsUsuarios === "function") {
+                    renderizarCardsUsuarios("lista-usuarios-login", "select-usuario", "selecionarUsuarioLogin");
+                }
+            });
+            window.addEventListener("storage", function() {
+                if (typeof renderizarCardsUsuarios === "function") {
+                    renderizarCardsUsuarios("lista-usuarios-login", "select-usuario", "selecionarUsuarioLogin");
+                }
+            });
+            if (typeof renderizarCardsUsuarios === "function") {
+                renderizarCardsUsuarios("lista-usuarios-login", "select-usuario", "selecionarUsuarioLogin");
+            }
+        });
         let timerLogin = null;
 
         function selecionarUsuarioLogin(nome, el) {

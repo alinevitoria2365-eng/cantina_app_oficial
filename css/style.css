@@ -1484,7 +1484,7 @@ body.login-page .login-container {
 }
 
 .login-form.visible {
-    max-height: 850px;
+    max-height: 2500px;
     opacity: 1;
     margin-top: 20px;
 }

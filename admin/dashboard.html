@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body.cv-page-body .container.dashboard-container {
+            max-width: 520px;
+        }
+        .dash-sync-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f0f5ff;
+            border: 1px solid #d4e2fc;
+            border-radius: 12px;
+            padding: 8px 12px;
+            margin: 10px 0 16px;
+            font-size: 12px;
+            color: #12305c;
+        }
+        .dash-sync-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #38a169;
+            display: inline-block;
+            margin-right: 6px;
+            box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.2);
+        }
+        .dash-refresh-btn {
+            background: #ffffff;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1a4fbf;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .dash-refresh-btn:hover {
+            background: #e6f0ff;
+            border-color: #1a4fbf;
+        }
+        .dash-kpi-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .dash-kpi-card {
+            background: linear-gradient(135deg, #1a4fbf, #12305c);
+            color: #ffffff;
+            border-radius: 16px;
+            padding: 14px 12px;
+            text-align: left;
+            box-shadow: 0 6px 16px rgba(18, 48, 92, 0.18);
+            position: relative;
+            overflow: hidden;
+        }
+        .dash-kpi-card.green {
+            background: linear-gradient(135deg, #38a169, #276749);
+            box-shadow: 0 6px 16px rgba(39, 103, 73, 0.2);
+        }
+        .dash-kpi-card.orange {
+            background: linear-gradient(135deg, #dd6b20, #c05621);
+            box-shadow: 0 6px 16px rgba(192, 86, 33, 0.2);
+        }
+        .dash-kpi-card.red {
+            background: linear-gradient(135deg, #e53e3e, #9b2c2c);
+            box-shadow: 0 6px 16px rgba(155, 44, 44, 0.2);
+        }
+        .dash-kpi-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        .dash-kpi-label {
+            font-size: 12px;
+            font-weight: 600;
+            opacity: 0.92;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .dash-kpi-icon {
+            font-size: 18px;
+        }
+        .dash-kpi-value {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 26px;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+        .dash-kpi-sub {
+            font-size: 11.5px;
+            opacity: 0.88;
+            margin-top: 4px;
+        }
+        .dash-nav-pills {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+        .dash-pill {
+            padding: 7px 13px;
+            border-radius: 20px;
+            border: 1px solid #dbe1ea;
+            background: #f7fafc;
+            color: #4a5568;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .dash-pill.active {
+            background: linear-gradient(135deg, #1a4fbf, #12305c);
+            color: #ffffff;
+            border-color: #12305c;
+        }
+        .dash-section {
+            background: #f8fafd;
+            border: 1.5px solid #e4e8ef;
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+        .dash-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1.5px solid #e4e8ef;
+        }
+        .dash-section-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #12305c;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .dash-badge {
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: #e6f0ff;
+            color: #1a4fbf;
+        }
+        .dash-badge.red {
+            background: #fff5f5;
+            color: #c53030;
+            border: 1px solid #fed7d7;
+        }
+        .dash-badge.green {
+            background: #f0fff4;
+            color: #276749;
+            border: 1px solid #c6f6d5;
+        }
+        .dash-item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffff;
+            border: 1px solid #e6ebf2;
+            border-radius: 12px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            gap: 10px;
+        }
+        .dash-item-row:last-child {
+            margin-bottom: 0;
+        }
+        .dash-item-main {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 0;
+        }
+        .dash-item-name {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: #12305c;
+        }
+        .dash-item-meta {
+            font-size: 12px;
+            color: #718096;
+            margin-top: 2px;
+        }
+        .dash-item-qty {
+            font-size: 14px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 10px;
+            white-space: nowrap;
+        }
+        .dash-item-qty.entrada {
+            background: #f0fff4;
+            color: #276749;
+            border: 1px solid #c6f6d5;
+        }
+        .dash-item-qty.saida {
+            background: #fff5f5;
+            color: #c53030;
+            border: 1px solid #fed7d7;
+        }
+        .dash-bar-wrap {
+            width: 100%;
+            height: 7px;
+            background: #edf2f7;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+        .dash-bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+        .dash-empty {
+            text-align: center;
+            padding: 18px 12px;
+            color: #718096;
+            font-size: 13.5px;
+        }
+        .dash-search-input {
+            width: 100%;
+            padding: 10px 14px !important;
+            border: 1.5px solid #dbe1ea !important;
+            border-radius: 10px !important;
+            font-size: 14px !important;
+            background: #ffffff !important;
+            margin-bottom: 10px;
+        }
+        .dash-sub-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #4a5568;
+            margin: 12px 0 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .dash-quick-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #1a4fbf;
+            text-decoration: none;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+        .dash-quick-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="cv-page-body">
+    <div class="container cv-card dashboard-container">
+
+        <!-- LOGOTIPO CORONEL VENÂNCIO -->
+        <div class="cv-header">
+            <img class="cv-shield" src="../logocv.png" alt="Logotipo Coronel Venâncio">
+            <span class="cv-logo-title">Coronel Venâncio</span>
+            <span class="cv-logo-underline"></span>
+        </div>
+
+        <h2 class="cv-page-title">Dashboard</h2>
+        <div class="cv-divider"><span></span><i></i><span></span></div>
+        <p class="cv-page-subtitle">Visão em tempo real do estoque, entregas e saídas da semana</p>
+
+        <!-- BARRA DE SINCRONIZAÇÃO EM TEMPO REAL -->
+        <div class="dash-sync-bar">
+            <span><span class="dash-sync-dot"></span><span id="dash-last-update">Atualizado agora</span></span>
+            <button type="button" class="dash-refresh-btn" onclick="atualizarDashboard()">↻ Atualizar</button>
+        </div>
+
+        <!-- CARDS DE RESUMO (KPIs) -->
+        <div class="dash-kpi-grid" id="dash-kpis"></div>
+
+        <!-- FILTRO RÁPIDO DE SEÇÕES -->
+        <div class="dash-nav-pills">
+            <button type="button" class="dash-pill active" data-sec="todas" onclick="filtrarSecaoDashboard('todas', this)">📊 Tudo</button>
+            <button type="button" class="dash-pill" data-sec="saidas" onclick="filtrarSecaoDashboard('saidas', this)">📤 Saídas da Semana</button>
+            <button type="button" class="dash-pill" data-sec="entregas" onclick="filtrarSecaoDashboard('entregas', this)">📥 Últimas Entregas</button>
+            <button type="button" class="dash-pill" data-sec="estoque" onclick="filtrarSecaoDashboard('estoque', this)">📦 Estoque Atual</button>
+        </div>
+
+        <!-- SEÇÃO 1: SAÍDAS DO ESTOQUE NA SEMANA -->
+        <div class="dash-section" id="sec-saidas">
+            <div class="dash-section-header">
+                <span class="dash-section-title">📤 Saídas na Semana</span>
+                <span class="dash-badge red" id="badge-saidas-semana">0 un.</span>
+            </div>
+            <div id="conteudo-saidas-semana"></div>
+        </div>
+
+        <!-- SEÇÃO 2: ÚLTIMAS ENTREGAS (ENTRADAS) -->
+        <div class="dash-section" id="sec-entregas">
+            <div class="dash-section-header">
+                <span class="dash-section-title">📥 Últimas Entregas</span>
+                <span class="dash-badge green" id="badge-ultimas-entregas">0 entregas</span>
+            </div>
+            <div id="conteudo-ultimas-entregas"></div>
+            <div style="text-align:right;margin-top:8px;">
+                <a class="dash-quick-link" href="entrada.html">+ Registrar nova entrega no estoque →</a>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 3: SITUAÇÃO ATUAL DO ESTOQUE -->
+        <div class="dash-section" id="sec-estoque">
+            <div class="dash-section-header">
+                <span class="dash-section-title">📦 Estoque Atual</span>
+                <span class="dash-badge" id="badge-estoque-total">0 itens</span>
+            </div>
+            <input type="text" id="busca-estoque-dash" class="dash-search-input" placeholder="🔍 Buscar produto no estoque..." oninput="renderizarEstoqueDashboard()">
+            <div id="conteudo-estoque-atual"></div>
+        </div>
+
+        <div class="footer-bar cv-back-bar">
+            <button type="button" class="btn btn-outline cv-back-btn" onclick="window.location.href='menu.html'">
+                <span class="cv-back-icon">
+                    <svg viewBox="0 0 24 24" width="22" height="20" fill="none" stroke="#12305c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12 H4 M4 12 L10 6 M4 12 L10 18"/></svg>
+                </span>
+                <span class="cv-back-divider"></span>
+                <span class="cv-back-text">Voltar ao Menu</span>
+            </button>
+        </div>
+
+        <div class="cv-footer">
+            <div class="cv-footer-line"></div>
+            <span class="cv-footer-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#1a4fbf" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 2 V9 M3 2 V7 C3 8.5 4 9 5 9 M7 2 V7 C7 8.5 6 9 5 9"/>
+                    <path d="M5 9 V22"/>
+                    <path d="M17 2 C14.2 2 14 6 14 8.5 C14 10 15 10.5 16.5 10.5 V22"/>
+                    <path d="M16.5 10.5 V2"/>
+                </svg>
+            </span>
+            <div class="cv-footer-line"></div>
+        </div>
+        <p class="cv-footer-text">Qualidade, organização e cuidado em cada refeição.</p>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (getLoggedInType() !== "admin") {
+                window.location.href = "login.html";
+                return;
+            }
+            atualizarDashboard();
+        });
+
+        // Atualiza automaticamente sempre que voltar à aba/página ou quando houver uso em outra aba
+        window.addEventListener("pageshow", atualizarDashboard);
+        window.addEventListener("focus", atualizarDashboard);
+        document.addEventListener("visibilitychange", function() {
+            if (!document.hidden) atualizarDashboard();
+        });
+        window.addEventListener("storage", atualizarDashboard);
+
+        function filtrarSecaoDashboard(secao, btnEl) {
+            document.querySelectorAll(".dash-pill").forEach(b => b.classList.remove("active"));
+            if (btnEl) btnEl.classList.add("active");
+
+            const secSaidas = document.getElementById("sec-saidas");
+            const secEntregas = document.getElementById("sec-entregas");
+            const secEstoque = document.getElementById("sec-estoque");
+
+            if (secao === "todas") {
+                secSaidas.style.display = "block";
+                secEntregas.style.display = "block";
+                secEstoque.style.display = "block";
+            } else {
+                secSaidas.style.display = secao === "saidas" ? "block" : "none";
+                secEntregas.style.display = secao === "entregas" ? "block" : "none";
+                secEstoque.style.display = secao === "estoque" ? "block" : "none";
+            }
+        }
+
+        function atualizarDashboard() {
+            const products = getProducts();
+            const todasMov = getMovimentacoes();
+            const movSemana = typeof getMovimentacoesUltimosDias === "function"
+                ? getMovimentacoesUltimosDias(7)
+                : todasMov;
+
+            const totalUnidadesEstoque = products.reduce((acc, p) => acc + p.quantidade, 0);
+            const produtosCriticos = products.filter(p => p.quantidade < 10).length;
+
+            const saidasSemana = movSemana.filter(m => m.tipo === "saida");
+            const totalUnidadesSaidasSemana = saidasSemana.reduce((acc, m) => acc + m.quantidade, 0);
+
+            const todasEntradas = todasMov.filter(m => m.tipo === "entrada");
+            const entradasSemana = movSemana.filter(m => m.tipo === "entrada");
+            const totalUnidadesEntradasSemana = entradasSemana.reduce((acc, m) => acc + m.quantidade, 0);
+
+            // Atualizar horário
+            const agora = new Date();
+            const lastUpdateEl = document.getElementById("dash-last-update");
+            if (lastUpdateEl) {
+                lastUpdateEl.textContent = `Atualizado às ${agora.toLocaleTimeString("pt-BR")}`;
+            }
+
+            // Renderizar KPIs
+            const kpisEl = document.getElementById("dash-kpis");
+            if (kpisEl) {
+                kpisEl.innerHTML = `
+                    <div class="dash-kpi-card">
+                        <div class="dash-kpi-top">
+                            <span class="dash-kpi-label">Estoque Total</span>
+                            <span class="dash-kpi-icon">📦</span>
+                        </div>
+                        <div class="dash-kpi-value">${totalUnidadesEstoque}</div>
+                        <div class="dash-kpi-sub">${products.length} produtos cadastrados</div>
+                    </div>
+
+                    <div class="dash-kpi-card orange">
+                        <div class="dash-kpi-top">
+                            <span class="dash-kpi-label">Saídas na Semana</span>
+                            <span class="dash-kpi-icon">📤</span>
+                        </div>
+                        <div class="dash-kpi-value">${totalUnidadesSaidasSemana}</div>
+                        <div class="dash-kpi-sub">${saidasSemana.length} retirada(s) nos últimos 7 dias</div>
+                    </div>
+
+                    <div class="dash-kpi-card green">
+                        <div class="dash-kpi-top">
+                            <span class="dash-kpi-label">Entregas (7 dias)</span>
+                            <span class="dash-kpi-icon">📥</span>
+                        </div>
+                        <div class="dash-kpi-value">+${totalUnidadesEntradasSemana}</div>
+                        <div class="dash-kpi-sub">${todasEntradas.length} entrega(s) no histórico</div>
+                    </div>
+
+                    <div class="dash-kpi-card ${produtosCriticos > 0 ? 'red' : ''}">
+                        <div class="dash-kpi-top">
+                            <span class="dash-kpi-label">Estoque Baixo</span>
+                            <span class="dash-kpi-icon">${produtosCriticos > 0 ? '⚠️' : '✅'}</span>
+                        </div>
+                        <div class="dash-kpi-value">${produtosCriticos}</div>
+                        <div class="dash-kpi-sub">${produtosCriticos > 0 ? 'Abaixo de 10 unidades' : 'Estoque saudável'}</div>
+                    </div>
+                `;
+            }
+
+            renderizarSaidasSemanaDashboard(saidasSemana, totalUnidadesSaidasSemana);
+            renderizarUltimasEntregasDashboard(todasEntradas);
+            renderizarEstoqueDashboard();
+        }
+
+        function renderizarSaidasSemanaDashboard(saidasSemana, totalUnidadesSaidasSemana) {
+            const badge = document.getElementById("badge-saidas-semana");
+            if (badge) {
+                badge.textContent = `${totalUnidadesSaidasSemana} un. na semana`;
+            }
+
+            const container = document.getElementById("conteudo-saidas-semana");
+            if (!container) return;
+
+            if (saidasSemana.length === 0) {
+                container.innerHTML = `
+                    <div class="dash-empty">
+                        Nenhuma saída de estoque registrada nos últimos 7 dias.<br>
+                        <span style="font-size:12px;">As baixas do cardápio, pedidos aprovados e saídas manuais aparecerão aqui automaticamente.</span>
+                    </div>
+                `;
+                return;
+            }
+
+            // Agrupar por produto na semana
+            const porProduto = {};
+            saidasSemana.forEach(m => {
+                if (!porProduto[m.produto]) {
+                    porProduto[m.produto] = 0;
+                }
+                porProduto[m.produto] += m.quantidade;
+            });
+
+            const rankingSemana = Object.entries(porProduto)
+                .map(([produto, qtd]) => ({ produto, qtd }))
+                .sort((a, b) => b.qtd - a.qtd);
+
+            const maxQtd = rankingSemana[0] ? rankingSemana[0].qtd : 1;
+
+            let html = `<div class="dash-sub-title">Consumo por Produto na Semana</div>`;
+            rankingSemana.forEach(item => {
+                const pct = Math.max(8, Math.round((item.qtd / maxQtd) * 100));
+                html += `
+                    <div class="dash-item-row" style="flex-direction:column;align-items:stretch;gap:4px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <span class="dash-item-name">${item.produto}</span>
+                            <span class="dash-item-qty saida">−${item.qtd} un.</span>
+                        </div>
+                        <div class="dash-bar-wrap">
+                            <div class="dash-bar-fill" style="width:${pct}%;background:linear-gradient(90deg,#ed8936,#e53e3e);"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Últimas movimentações de saída da semana
+            const recentes = [...saidasSemana].reverse().slice(0, 8);
+            html += `<div class="dash-sub-title" style="margin-top:14px;">Últimas Retiradas da Semana</div>`;
+            recentes.forEach(m => {
+                html += `
+                    <div class="dash-item-row">
+                        <div class="dash-item-main">
+                            <span class="dash-item-name">${m.produto}</span>
+                            <span class="dash-item-meta">📅 ${m.data} • ${m.motivo || m.responsavel || "Saída"} (${m.responsavel || "Sistema"})</span>
+                        </div>
+                        <span class="dash-item-qty saida">−${m.quantidade}</span>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function renderizarUltimasEntregasDashboard(todasEntradas) {
+            const badge = document.getElementById("badge-ultimas-entregas");
+            if (badge) {
+                badge.textContent = `${todasEntradas.length} registro(s)`;
+            }
+
+            const container = document.getElementById("conteudo-ultimas-entregas");
+            if (!container) return;
+
+            if (todasEntradas.length === 0) {
+                container.innerHTML = `
+                    <div class="dash-empty">
+                        Nenhuma entrega (entrada) registrada ainda.<br>
+                        <span style="font-size:12px;">Quando você registrar entradas de produtos, elas aparecerão aqui automaticamente.</span>
+                    </div>
+                `;
+                return;
+            }
+
+            const ultimas = [...todasEntradas].reverse().slice(0, 10);
+            let html = "";
+            ultimas.forEach(m => {
+                html += `
+                    <div class="dash-item-row">
+                        <div class="dash-item-main">
+                            <span class="dash-item-name">${m.produto}</span>
+                            <span class="dash-item-meta">📅 ${m.data} • Recebido por: <strong>${m.responsavel || "Admin"}</strong></span>
+                        </div>
+                        <span class="dash-item-qty entrada">+${m.quantidade} un.</span>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function renderizarEstoqueDashboard() {
+            const products = getProducts();
+            const badge = document.getElementById("badge-estoque-total");
+            const totalItens = products.reduce((s, p) => s + p.quantidade, 0);
+            if (badge) {
+                badge.textContent = `${totalItens} un. disponíveis`;
+            }
+
+            const container = document.getElementById("conteudo-estoque-atual");
+            if (!container) return;
+
+            const buscaInput = document.getElementById("busca-estoque-dash");
+            const termo = buscaInput ? buscaInput.value.toLowerCase().trim() : "";
+
+            const filtrados = products
+                .filter(p => !termo || p.nome.toLowerCase().includes(termo))
+                .sort((a, b) => a.quantidade - b.quantidade); // Mostra os com menor estoque primeiro para fácil controle
+
+            if (filtrados.length === 0) {
+                container.innerHTML = `<div class="dash-empty">Nenhum produto encontrado para "${termo}".</div>`;
+                return;
+            }
+
+            let html = "";
+            filtrados.forEach(p => {
+                const isCritico = p.quantidade < 10;
+                const isAtencao = p.quantidade >= 10 && p.quantidade < 20;
+                const corBarra = isCritico ? "#e53e3e" : (isAtencao ? "#dd6b20" : "#38a169");
+                const statusTexto = p.quantidade === 0 ? "Esgotado" : (isCritico ? "Estoque Baixo" : (isAtencao ? "Atenção" : "Normal"));
+                const pct = Math.min(100, Math.max(5, Math.round((p.quantidade / 60) * 100)));
+
+                html += `
+                    <div class="dash-item-row" style="flex-direction:column;align-items:stretch;gap:5px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div>
+                                <span class="dash-item-name">${p.nome}</span>
+                                <span style="font-size:11.5px;margin-left:6px;padding:2px 8px;border-radius:10px;background:${isCritico ? '#fff5f5' : (isAtencao ? '#fffaf0' : '#f0fff4')};color:${corBarra};font-weight:700;">
+                                    ${statusTexto}
+                                </span>
+                            </div>
+                            <strong style="font-size:15px;color:#12305c;">${p.quantidade} un.</strong>
+                        </div>
+                        <div class="dash-bar-wrap">
+                            <div class="dash-bar-fill" style="width:${pct}%;background:${corBarra};"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
+

@@ -469,6 +469,9 @@
             } else {
                 if (adminFields) adminFields.style.display = 'none';
                 if (usuarioFields) usuarioFields.style.display = 'block';
+                if (typeof renderizarCardsUsuarios === 'function') {
+                    renderizarCardsUsuarios('lista-usuarios-index', 'select-usuario', 'selecionarUsuarioIndex');
+                }
                 if (testCreds) {
                     testCreds.style.display = 'block';
                     document.getElementById('test-creds-text').textContent = 'Toque no seu nome na lista para acessar o sistema';
@@ -542,6 +545,19 @@
 
         // Enter navega entre os campos e dispara o login
         document.addEventListener('DOMContentLoaded', function() {
+            window.addEventListener('pageshow', function() {
+                if (typeof renderizarCardsUsuarios === 'function') {
+                    renderizarCardsUsuarios('lista-usuarios-index', 'select-usuario', 'selecionarUsuarioIndex');
+                }
+            });
+            window.addEventListener('storage', function() {
+                if (typeof renderizarCardsUsuarios === 'function') {
+                    renderizarCardsUsuarios('lista-usuarios-index', 'select-usuario', 'selecionarUsuarioIndex');
+                }
+            });
+            if (typeof renderizarCardsUsuarios === 'function') {
+                renderizarCardsUsuarios('lista-usuarios-index', 'select-usuario', 'selecionarUsuarioIndex');
+            }
             const cpf = document.getElementById('cpf');
             const senha = document.getElementById('senha');
             const selectUser = document.getElementById('select-usuario');
